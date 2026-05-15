@@ -84,8 +84,9 @@ window.GitHubSync = (function() {
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${token}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
       },
       body: JSON.stringify(body)
     });
