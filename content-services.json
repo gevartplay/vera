@@ -24,9 +24,9 @@
     "srv-5-title": "Ламинирование бровей или ресниц",
     "srv-5-desc": "Эффект держится 1-1,5 месяца. Время работы 1 час.<div>Ламинирование бровей с коррекцией и окрашиванием.</div><div>Ламинирование ресниц с окрашиванием.</div>",
     "srv-5-price": "1500 ₽",
-    "srv-6-title": "Удаление перманента",
-    "srv-6-desc": "Ремувер или лазер — безопасное удаление неудачного татуажа.",
-    "srv-6-price": "от 2 500 ₽",
+    "srv-6-title": "Макияж&nbsp;",
+    "srv-6-desc": "Макияж: дневной, вечерний, свадебный. Время работы 1 час.&nbsp;",
+    "srv-6-price": "1 500&nbsp;<span style=\"letter-spacing: 0.3px;\">₽ | 2 000&nbsp;</span><span style=\"letter-spacing: 0.3px;\">₽ | 2 500&nbsp;</span><span style=\"letter-spacing: 0.3px;\">₽</span>",
     "cta-title-2": "Готова к преображению?",
     "cta-btn-2": "Записаться сейчас",
     "footer-text": "© Вера · Студия перманентного макияжа"
@@ -35,8 +35,9 @@
     "srv-1-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845196863_srv-1-img.png",
     "srv-2-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845899522_srv-2-img.png",
     "srv-3-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845973493_srv-3-img.png",
-    "srv-4-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778846974507_srv-4-img.png",
-    "srv-5-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778847567789_srv-5-img.png"
+    "srv-4-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778868436083_srv-4-img.jpg",
+    "srv-5-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778867996881_srv-5-img.jpg",
+    "srv-6-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778868333488_srv-6-img.jpg"
   },
-  "updated": 1778848225290
+  "updated": 1778868442016
 }
