@@ -1,7 +1,15 @@
 {
   "2026-05-16": {
     "dayOff": false,
-    "slots": {}
+    "slots": {
+      "16": {
+        "status": "booked",
+        "name": "ВВ",
+        "phone": "",
+        "service": "Перманент губ",
+        "note": ""
+      }
+    }
   },
   "2026-05-17": {
     "dayOff": false,
