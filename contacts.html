@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Контакты — Вера</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo" data-edit="site-name">Вера</a>
+  <nav>
+    <a href="index.html" data-edit="nav-home">Главная</a>
+    <a href="services.html" data-edit="nav-services">Услуги</a>
+    <a href="calendar.html" data-edit="nav-calendar">Календарь</a>
+    <a href="about.html" data-edit="nav-about">Обо мне</a>
+    <a href="contacts.html" data-edit="nav-contacts">Контакты</a>
+  </nav>
+  <a href="https://vk.com/veronikaavakyan" class="btn-book" data-edit="btn-book">Записаться</a>
+  <button id="adminBtn">●</button>
+</header>
+
+<section class="contacts-section">
+  <h1 data-edit="contacts-h1">Свяжись со мной</h1>
+  <p data-edit="contacts-sub">Отвечаю быстро в Telegram и WhatsApp</p>
+
+  <div class="contacts-grid">
+    <a href="https://vk.com/veronikaavakyan" class="contact-card tg">
+      <span class="contact-icon">✈</span>
+      <b data-edit="cnt-1-title">Telegram</b>
+      <span data-edit="cnt-1-val">@vera_permanent</span>
+    </a>
+    <a href="tel:+79506960909" class="contact-card phone">
+      <span class="contact-icon">☎</span>
+      <b data-edit="cnt-2-title">Телефон</b>
+      <span data-edit="cnt-2-val">+7 950 696 09 09</span>
+    </a>
+    <a href="https://wa.me/79506960909" class="contact-card wa">
+      <span class="contact-icon">💬</span>
+      <b data-edit="cnt-3-title">WhatsApp</b>
+      <span data-edit="cnt-3-val">+7 950 696 09 09</span>
+    </a>
+    <a href="#" class="contact-card ig">
+      <span class="contact-icon">◉</span>
+      <b data-edit="cnt-4-title">Instagram</b>
+      <span data-edit="cnt-4-val">@vera.permanent</span>
+    </a>
+  </div>
+
+  <div class="address-block">
+    <h3 data-edit="addr-title">Адрес студии</h3>
+    <p data-edit="addr-text">г. Москва, ул. Примерная, д. 1, студия 5</p>
+    <p data-edit="addr-hours">Пн-Сб: 10:00 — 20:00</p>
+  </div>
+</section>
+
+<footer>
+  <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
+</footer>
+
+<div id="adminModal" class="admin-modal">
+  <div class="admin-box">
+    <h3>Вход администратора</h3>
+    <input type="password" id="adminPass" placeholder="Пароль">
+    <button id="adminLogin">Войти</button>
+    <button id="adminClose">Отмена</button>
+  </div>
+</div>
+<div id="adminPanel" class="admin-panel">
+  <span>🔓 Админ режим</span>
+  <button id="adminSave">💾 Сохранить</button>
+  <button id="adminLogout">Выйти</button>
+</div>
+
+<script src="js/github-sync.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

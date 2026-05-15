@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Календарь записи — Вера</title>
+<meta name="description" content="Свободные дни и часы для записи на перманентный макияж">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo" data-edit="site-name">Вера</a>
+  <nav>
+    <a href="index.html" data-edit="nav-home">Главная</a>
+    <a href="services.html" data-edit="nav-services">Услуги</a>
+    <a href="calendar.html" data-edit="nav-calendar">Календарь</a>
+    <a href="about.html" data-edit="nav-about">Обо мне</a>
+    <a href="contacts.html" data-edit="nav-contacts">Контакты</a>
+  </nav>
+  <a href="https://vk.com/veronikaavakyan" class="btn-book" data-edit="btn-book">Записаться</a>
+  <button id="adminBtn" title="Админ">●</button>
+</header>
+
+<section class="page-hero">
+  <h1 data-edit="cal-h1">Календарь записи</h1>
+  <p data-edit="cal-sub">Выбери удобный день и время · работаю с 10:00 до 20:00</p>
+</section>
+
+<!-- Легенда -->
+<section class="cal-legend">
+  <div class="legend-item"><span class="dot free"></span>Свободно</div>
+  <div class="legend-item"><span class="dot busy"></span>Занято</div>
+  <div class="legend-item"><span class="dot off"></span>Выходной</div>
+  <div class="legend-item admin-only"><span class="dot booked"></span>Запись клиента</div>
+</section>
+
+<!-- Контейнер календаря -->
+<section class="calendar-wrap">
+  <div class="cal-nav">
+    <button id="prevMonth">‹</button>
+    <h2 id="monthLabel">—</h2>
+    <button id="nextMonth">›</button>
+  </div>
+
+  <div class="cal-weekdays">
+    <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+  </div>
+
+  <div class="cal-grid" id="calGrid"></div>
+</section>
+
+<!-- Панель часов выбранного дня -->
+<section class="day-panel" id="dayPanel" style="display:none">
+  <div class="day-panel-head">
+    <h3 id="dayTitle">—</h3>
+    <button id="dayClose">✕</button>
+  </div>
+
+  <!-- Только для админа -->
+  <div class="admin-day-controls admin-only">
+    <button id="toggleDayOff">🌙 Сделать выходным</button>
+    <button id="clearDay">♻ Очистить день</button>
+  </div>
+
+  <div class="hours-grid" id="hoursGrid"></div>
+
+  <!-- Кнопка записи для клиента -->
+  <div class="day-cta client-only">
+    <p>Понравился слот? Напиши мне в Telegram — закреплю время за тобой.</p>
+    <a href="https://vk.com/veronikaavakyan" class="big-btn">Записаться в Telegram</a>
+  </div>
+</section>
+
+<!-- Модалка добавления записи (только админ) -->
+<div id="bookingModal" class="admin-modal">
+  <div class="admin-box booking-box">
+    <h3>Запись клиента</h3>
+    <p id="bookingSlotInfo" style="opacity:.6;font-size:13px"></p>
+    <input type="text" id="clientName" placeholder="Имя клиента">
+    <input type="text" id="clientPhone" placeholder="Телефон / Telegram">
+    <select id="clientService">
+      <option value="Перманент губ">Перманент губ</option>
+      <option value="Перманент бровей">Перманент бровей</option>
+      <option value="Межресничка / Стрелки">Межресничка / Стрелки</option>
+      <option value="Художественное тату">Художественное тату</option>
+      <option value="Коррекция">Коррекция</option>
+      <option value="Удаление">Удаление</option>
+      <option value="Другое">Другое</option>
+    </select>
+    <textarea id="clientNote" placeholder="Заметка (необязательно)" rows="2"></textarea>
+    <div class="booking-btns">
+      <button id="bookingSave">Сохранить запись</button>
+      <button id="bookingDelete" style="background:#3a1f1f;color:#e89dac;border:1px solid #5a2a2a">🗑 Удалить</button>
+      <button id="bookingCancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
+</footer>
+
+<!-- Общая админка -->
+<div id="adminModal" class="admin-modal">
+  <div class="admin-box">
+    <h3>Вход администратора</h3>
+    <input type="password" id="adminPass" placeholder="Пароль">
+    <button id="adminLogin">Войти</button>
+    <button id="adminClose">Отмена</button>
+  </div>
+</div>
+<div id="adminPanel" class="admin-panel">
+  <span>🔓 Админ режим — кликай по часам чтобы добавить запись</span>
+  <button id="adminExport">📄 История</button>
+  <button id="adminExportJSON">💾 Бэкап</button>
+  <button id="adminImport">⬆ Импорт</button>
+  <button id="adminLogout">Выйти</button>
+  <input type="file" id="importFile" accept="application/json" style="display:none">
+</div>
+
+<script src="js/github-sync.js"></script>
+<script src="js/main.js"></script>
+<script src="js/calendar.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Обо мне — Вера</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo" data-edit="site-name">Вера</a>
+  <nav>
+    <a href="index.html" data-edit="nav-home">Главная</a>
+    <a href="services.html" data-edit="nav-services">Услуги</a>
+    <a href="calendar.html" data-edit="nav-calendar">Календарь</a>
+    <a href="about.html" data-edit="nav-about">Обо мне</a>
+    <a href="contacts.html" data-edit="nav-contacts">Контакты</a>
+  </nav>
+  <a href="https://t.me/+79506960909" class="btn-book" data-edit="btn-book">Записаться</a>
+  <button id="adminBtn">●</button>
+</header>
+
+<section class="about-section">
+  <div class="about-photo">
+    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80" data-edit-img="about-img">
+  </div>
+  <div class="about-text">
+    <span class="about-label" data-edit="about-label">МАСТЕР</span>
+    <h1 data-edit="about-h1">Привет, я Вера</h1>
+    <p data-edit="about-p1">Я создаю красоту, которая остаётся с тобой надолго. Более 8 лет я помогаю женщинам подчеркнуть их природную привлекательность с помощью перманентного макияжа и художественного тату.</p>
+    <p data-edit="about-p2">Каждая клиентка для меня — это новая история. Я внимательно слушаю, подбираю форму и оттенок, чтобы результат превосходил ожидания.</p>
+    <div class="stats">
+      <div><b data-edit="stat-1-num">2000+</b><span data-edit="stat-1-lbl">клиентов</span></div>
+      <div><b data-edit="stat-2-num">8</b><span data-edit="stat-2-lbl">лет опыта</span></div>
+      <div><b data-edit="stat-3-num">15+</b><span data-edit="stat-3-lbl">сертификатов</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <blockquote data-edit="quote-text">«Красота — это не маска. Это уверенность, которую я помогаю раскрыть в каждой женщине.»</blockquote>
+  <cite data-edit="quote-author">— Вера</cite>
+</section>
+
+<section id="cta-block">
+  <h2 data-edit="about-cta-title">Познакомимся?</h2>
+  <a href="https://t.me/+79506960909" class="big-btn" data-edit="about-cta-btn">Написать мне</a>
+</section>
+
+<footer>
+  <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
+</footer>
+
+<div id="adminModal" class="admin-modal">
+  <div class="admin-box">
+    <h3>Вход администратора</h3>
+    <input type="password" id="adminPass" placeholder="Пароль">
+    <button id="adminLogin">Войти</button>
+    <button id="adminClose">Отмена</button>
+  </div>
+</div>
+<div id="adminPanel" class="admin-panel">
+  <span>🔓 Админ режим</span>
+  <button id="adminSave">💾 Сохранить</button>
+  <button id="adminLogout">Выйти</button>
+</div>
+
+<script src="js/github-sync.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

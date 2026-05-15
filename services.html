@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Услуги — Вера</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo" data-edit="site-name">Вера</a>
+  <nav>
+    <a href="index.html" data-edit="nav-home">Главная</a>
+    <a href="services.html" data-edit="nav-services">Услуги</a>
+    <a href="calendar.html" data-edit="nav-calendar">Календарь</a>
+    <a href="about.html" data-edit="nav-about">Обо мне</a>
+    <a href="contacts.html" data-edit="nav-contacts">Контакты</a>
+  </nav>
+  <a href="https://https://vk.com/veronikaavakyan" class="btn-book" data-edit="btn-book">Записаться</a>
+  <button id="adminBtn">●</button>
+</header>
+
+<section class="page-hero">
+  <h1 data-edit="services-h1">Услуги и цены</h1>
+  <p data-edit="services-sub">Каждая процедура — это произведение искусства</p>
+</section>
+
+<section class="services-list">
+  <div class="service-card">
+    <img src="https://images.unsplash.com/photo-1560869713-da86a9ec0744?w=800&q=80" data-edit-img="srv-1-img">
+    <div class="service-info">
+      <h2 data-edit="srv-1-title">Перманент губ</h2>
+      <p data-edit="srv-1-desc">Акварельная техника, натуральный оттенок, эффект сочных губ без помады. Процедура длится 2-3 часа.</p>
+      <div class="price" data-edit="srv-1-price">от 8 000 ₽</div>
+    </div>
+  </div>
+
+  <div class="service-card reverse">
+    <img src="https://images.unsplash.com/photo-1583241800698-9c2e95b8b8c0?w=800&q=80" data-edit-img="srv-2-img">
+    <div class="service-info">
+      <h2 data-edit="srv-2-title">Перманент бровей</h2>
+      <p data-edit="srv-2-desc">Волосковая, пудровая или комбинированная техника. Идеальная форма и насыщенность на 2 года.</p>
+      <div class="price" data-edit="srv-2-price">от 7 000 ₽</div>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <img src="https://images.unsplash.com/photo-1612270043573-c2eb1cfc1f7d?w=800&q=80" data-edit-img="srv-3-img">
+    <div class="service-info">
+      <h2 data-edit="srv-3-title">Межресничка / Стрелки</h2>
+      <p data-edit="srv-3-desc">Эффект подводки, открытый взгляд. Деликатно и стильно — без растекающейся туши.</p>
+      <div class="price" data-edit="srv-3-price">от 6 000 ₽</div>
+    </div>
+  </div>
+
+  <div class="service-card reverse">
+    <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=800&q=80" data-edit-img="srv-4-img">
+    <div class="service-info">
+      <h2 data-edit="srv-4-title">Художественное тату</h2>
+      <p data-edit="srv-4-desc">Минимализм, надписи, цветы, графика. Эскиз разрабатывается индивидуально под вас.</p>
+      <div class="price" data-edit="srv-4-price">от 5 000 ₽</div>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=800&q=80" data-edit-img="srv-5-img">
+    <div class="service-info">
+      <h2 data-edit="srv-5-title">Коррекция перманента</h2>
+      <p data-edit="srv-5-desc">Обновление цвета и формы через 1-1.5 месяца после первой процедуры.</p>
+      <div class="price" data-edit="srv-5-price">от 3 500 ₽</div>
+    </div>
+  </div>
+
+  <div class="service-card reverse">
+    <img src="https://images.unsplash.com/photo-1588006173527-5b91056e69b4?w=800&q=80" data-edit-img="srv-6-img">
+    <div class="service-info">
+      <h2 data-edit="srv-6-title">Удаление перманента</h2>
+      <p data-edit="srv-6-desc">Ремувер или лазер — безопасное удаление неудачного татуажа.</p>
+      <div class="price" data-edit="srv-6-price">от 2 500 ₽</div>
+    </div>
+  </div>
+</section>
+
+<section id="cta-block">
+  <h2 data-edit="cta-title-2">Готова к преображению?</h2>
+  <a href="https://vk.com/veronikaavakyan" class="big-btn" data-edit="cta-btn-2">Записаться сейчас</a>
+</section>
+
+<footer>
+  <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
+</footer>
+
+<div id="adminModal" class="admin-modal">
+  <div class="admin-box">
+    <h3>Вход администратора</h3>
+    <input type="password" id="adminPass" placeholder="Пароль">
+    <button id="adminLogin">Войти</button>
+    <button id="adminClose">Отмена</button>
+  </div>
+</div>
+<div id="adminPanel" class="admin-panel">
+  <span>🔓 Админ режим</span>
+  <button id="adminSave">💾 Сохранить</button>
+  <button id="adminLogout">Выйти</button>
+</div>
+
+<script src="js/github-sync.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
