@@ -7,11 +7,10 @@
 
   // Структура данных:
   // { "2026-05-14": { dayOff:false, slots:{ "10":{status:"booked",name:"",phone:"",service:"",note:""}, "11":{status:"break"} } } }
-  let data = {}; // НЕ загружаем из localStorage - только из GitHub!
+  let data = {}; // Загружается из GitHub при старте
   let viewDate = new Date();
   viewDate.setDate(1);
   let selectedKey = null;
-  let isLoading = true; // Флаг загрузки
 
   // Сохранение ТОЛЬКО в GitHub (без localStorage)
   async function save(){
@@ -33,9 +32,6 @@
 
   // Загрузка календаря из GitHub при старте (публично, токен не нужен)
   async function loadCalendarFromGitHub(){
-    isLoading = true;
-    showLoadingState();
-
     if(window.GitHubSync && typeof window.GitHubSync.getFile === 'function'){
       try {
         const file = await window.GitHubSync.getFile('calendar.json');
@@ -44,38 +40,27 @@
           const githubData = JSON.parse(content);
           data = githubData;
           console.log('✓ Календарь загружен из GitHub');
-          isLoading = false;
           renderCalendar();
           return true;
         } else {
-          // Файл не найден - пустой календарь
+          // Файл не найден - показываем пустой календарь
+          console.log('Файл calendar.json не найден - показываем пустой календарь');
           data = {};
-          console.log('Файл calendar.json не найден - используем пустой календарь');
-          isLoading = false;
           renderCalendar();
           return false;
         }
       } catch(err) {
         console.warn('Не удалось загрузить календарь из GitHub:', err);
         data = {};
-        isLoading = false;
         renderCalendar();
         return false;
       }
     } else {
-      // GitHubSync не загружен
+      // GitHubSync не загружен - показываем пустой календарь
+      console.log('GitHubSync не загружен - показываем пустой календарь');
       data = {};
-      isLoading = false;
       renderCalendar();
       return false;
-    }
-  }
-
-  // Показать состояние загрузки
-  function showLoadingState(){
-    const grid = document.getElementById('calGrid');
-    if(grid){
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:50px;font-size:18px;color:#999">⏳ Загрузка календаря из GitHub...</div>';
     }
   }
     return false;
