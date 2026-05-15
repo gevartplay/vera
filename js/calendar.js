@@ -339,9 +339,12 @@
   mo.observe(document.body, { attributes:true, attributeFilter:['class'] });
 
   // ===== КНОПКА НАСТРОЙКИ ТОКЕНА =====
-  const setupTokenBtn = document.getElementById('setupGitHubToken');
-  if(setupTokenBtn){
-    setupTokenBtn.addEventListener('click', ()=>{
+  // Используем делегирование событий для надёжности
+  document.addEventListener('click', (e) => {
+    if(e.target && e.target.id === 'setupGitHubToken'){
+      e.preventDefault();
+      e.stopPropagation();
+
       const currentToken = window.GitHubSync ? window.GitHubSync.getToken() : null;
       const tokenInfo = currentToken ? `\n\nТекущий токен: ${currentToken.substring(0, 10)}...` : '\n\nТокен не настроен.';
 
@@ -368,8 +371,8 @@
       } else {
         alert('❌ GitHubSync не загружен. Обновите страницу и попробуйте снова.');
       }
-    });
-  }
+    }
+  });
 
   // ===== КНОПКА СОХРАНИТЬ В GITHUB =====
   const calendarSaveBtn = document.getElementById('calendarSave');
