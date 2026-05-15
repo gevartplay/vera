@@ -1,0 +1,27 @@
+{
+  "texts": {
+    "site-name": "Veronika",
+    "nav-home": "Главная",
+    "nav-services": "Услуги",
+    "nav-calendar": "Календарь",
+    "nav-about": "Обо мне",
+    "nav-contacts": "Контакты",
+    "btn-book": "Записаться",
+    "contacts-h1": "Свяжись со мной",
+    "contacts-sub": "Отвечаю быстро в vk",
+    "cnt-1-title": "VK",
+    "cnt-1-val": "@veronikaavakyan",
+    "cnt-2-title": "Телефон",
+    "cnt-2-val": "+7 950 696 09 09",
+    "cnt-3-title": "WhatsApp",
+    "cnt-3-val": "+7 950 696 09 09",
+    "cnt-4-title": "Instagram",
+    "cnt-4-val": "@vera_avak999",
+    "addr-title": "Адрес студии",
+    "addr-text": "г. Карачев ул. Ленина д. 21 (этаж 2, каб. 2)",
+    "addr-hours": "Пн-Сб: 10:00 — 20:00 - ПО ЗАПИСИ",
+    "footer-text": "© Вероника · Студия перманентного макияжа"
+  },
+  "images": {},
+  "updated": 1778873390125
+}
