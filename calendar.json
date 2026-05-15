@@ -10,6 +10,13 @@
   "2026-05-29": {
     "dayOff": false,
     "slots": {
+      "12": {
+        "status": "booked",
+        "name": "efsrfe",
+        "phone": "",
+        "service": "Перманент губ",
+        "note": "wwef"
+      },
       "14": {
         "status": "break"
       }
