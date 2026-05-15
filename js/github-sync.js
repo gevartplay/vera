@@ -50,10 +50,7 @@ window.GitHubSync = (function() {
     const url = `https://api.github.com/repos/${info.username}/${info.repo}/contents/${path}?t=${timestamp}`;
     const response = await fetch(url, {
       headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
+        'Accept': 'application/vnd.github.v3+json'
       }
     });
 
