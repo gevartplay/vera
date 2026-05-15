@@ -93,7 +93,15 @@ window.GitHubSync = (function() {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(`GitHub API error: ${error.message}`);
+      console.error('GitHub API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: error,
+        url: url,
+        hasToken: !!token,
+        tokenPrefix: token ? token.substring(0, 7) : 'none'
+      });
+      throw new Error(`GitHub API ${response.status}: ${error.message || response.statusText}`);
     }
 
     return await response.json();

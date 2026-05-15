@@ -13,9 +13,9 @@
   viewDate.setDate(1);
   let selectedKey = null;
 
-  // Сохранение: localStorage + GitHub
+  // Сохранение: сначала GitHub, потом localStorage
   async function save(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const oldData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 
     // Синхронизация с GitHub (если настроен)
     if(window.GitHubSync && typeof window.GitHubSync.isConfigured === 'function' && window.GitHubSync.isConfigured()){
@@ -24,9 +24,21 @@
         const sha = existing ? existing.sha : null;
         await window.GitHubSync.saveFile('calendar.json', JSON.stringify(data, null, 2), 'Update calendar', sha);
         console.log('✓ Календарь синхронизирован с GitHub');
+        // Только после успешной отправки в GitHub сохраняем локально
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       } catch(err) {
-        console.warn('Не удалось синхронизировать календарь с GitHub:', err);
+        console.error('❌ Не удалось синхронизировать календарь с GitHub:', err);
+        // Откатываем изменения
+        data = oldData;
+        renderCalendar();
+        if(selectedKey) renderHours();
+        alert('Ошибка сохранения в GitHub. Изменения отменены.\n\n' + err.message);
+        throw err; // Пробрасываем ошибку дальше
       }
+    } else {
+      // Если GitHub не настроен - сохраняем только локально
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      console.warn('⚠ GitHub не настроен. Данные сохранены только локально.');
     }
   }
 
