@@ -94,16 +94,25 @@
   const monthLabel = document.getElementById('monthLabel');
 
   function renderCalendar(){
+    if(!grid){
+      console.error('Элемент calGrid не найден!');
+      return;
+    }
+
     grid.innerHTML='';
     const year = viewDate.getFullYear();
     const month = viewDate.getMonth();
     monthLabel.textContent = `${MONTHS[month]} ${year}`;
+
+    console.log(`Рендерим календарь: ${MONTHS[month]} ${year}`);
 
     // первый день месяца (Пн=0)
     let first = new Date(year, month, 1).getDay();
     first = first===0 ? 6 : first-1;
     const daysInMonth = new Date(year, month+1, 0).getDate();
     const today = new Date(); today.setHours(0,0,0,0);
+
+    console.log(`Дней в месяце: ${daysInMonth}, первый день: ${first}`);
 
     for(let i=0;i<first;i++){
       const e=document.createElement('div');
