@@ -29,7 +29,11 @@
   },
   "2026-05-15": {
     "dayOff": false,
-    "slots": {}
+    "slots": {
+      "13": {
+        "status": "break"
+      }
+    }
   },
   "2026-05-20": {
     "dayOff": false,
