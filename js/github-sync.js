@@ -70,6 +70,11 @@ window.GitHubSync = (function() {
 
     if (!info || !token) throw new Error('GitHub не настроен');
 
+    // Проверка формата токена
+    if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+      throw new Error('Неправильный формат токена. Токен должен начинаться с ghp_ (Classic) или github_pat_ (Fine-grained)');
+    }
+
     const url = `https://api.github.com/repos/${info.username}/${info.repo}/contents/${path}`;
     const contentBase64 = btoa(unescape(encodeURIComponent(content)));
 
