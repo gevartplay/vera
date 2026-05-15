@@ -338,6 +338,39 @@
   });
   mo.observe(document.body, { attributes:true, attributeFilter:['class'] });
 
+  // ===== КНОПКА НАСТРОЙКИ ТОКЕНА =====
+  const setupTokenBtn = document.getElementById('setupGitHubToken');
+  if(setupTokenBtn){
+    setupTokenBtn.addEventListener('click', ()=>{
+      const currentToken = window.GitHubSync ? window.GitHubSync.getToken() : null;
+      const tokenInfo = currentToken ? `\n\nТекущий токен: ${currentToken.substring(0, 10)}...` : '\n\nТокен не настроен.';
+
+      const token = prompt(
+        `Настройка GitHub токена для календаря${tokenInfo}\n\n` +
+        `Введите Personal Access Token (Classic):\n` +
+        `- Должен начинаться с ghp_\n` +
+        `- Создать: https://github.com/settings/tokens\n` +
+        `- Права: repo (полный доступ)\n\n` +
+        `Оставьте пустым для отмены.`
+      );
+
+      if(token === null || token === '') return; // Отмена
+
+      if(!token.startsWith('ghp_') && !token.startsWith('github_pat_')){
+        alert('❌ Неправильный формат токена!\n\nТокен должен начинаться с:\n- ghp_ (Classic token)\n- github_pat_ (Fine-grained token)');
+        return;
+      }
+
+      if(window.GitHubSync){
+        window.GitHubSync.saveToken(token);
+        alert('✅ Токен сохранён!\n\nОбновите страницу для применения изменений.');
+        location.reload();
+      } else {
+        alert('❌ GitHubSync не загружен. Обновите страницу и попробуйте снова.');
+      }
+    });
+  }
+
   // ===== КНОПКА СОХРАНИТЬ В GITHUB =====
   const calendarSaveBtn = document.getElementById('calendarSave');
   if(calendarSaveBtn){
