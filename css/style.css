@@ -54,6 +54,15 @@ img{max-width:100%;display:block}
   color:#e89dac;transition:all .3s;
 }
 .btn-book:hover{background:#e89dac;color:#0f0f0f}
+.btn-edit{
+  padding:12px 24px;
+  border:1px solid #4CAF50;
+  border-radius:50px;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:#4CAF50;transition:all .3s;
+  background:none;cursor:pointer;
+}
+.btn-edit:hover{background:#4CAF50;color:#0f0f0f}
 #adminBtn{
   background:none;border:none;color:#333;font-size:20px;cursor:pointer;
   width:30px;height:30px;

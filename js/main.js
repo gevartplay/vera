@@ -83,11 +83,15 @@ const adminLogout = document.getElementById('adminLogout');
 const ADMIN_PASSWORD = '07051993';
 
 function isAdmin() {
-  return sessionStorage.getItem('vera_admin') === 'yes';
+  return localStorage.getItem('vera_admin') === 'yes';
 }
 
 function enableAdminMode() {
   document.body.classList.add('admin-mode');
+
+  // Скрываем кнопку "Редактировать" и показываем панель
+  const editBtn = document.getElementById('editBtn');
+  if(editBtn) editBtn.style.display = 'none';
   adminPanel.classList.add('show');
 
   // Показываем статус GitHub синхронизации
@@ -234,6 +238,11 @@ function handleImgClick(e) {
 function disableAdminMode() {
   document.body.classList.remove('admin-mode');
   adminPanel.classList.remove('show');
+
+  // Показываем кнопку "Редактировать" обратно
+  const editBtn = document.getElementById('editBtn');
+  if(editBtn) editBtn.style.display = '';
+
   document.querySelectorAll('[data-edit]').forEach(el => {
     el.removeAttribute('contenteditable');
   });
@@ -242,7 +251,7 @@ function disableAdminMode() {
 adminBtn.addEventListener('click', () => {
   if (isAdmin()) {
     if (confirm('Выйти из режима администратора?')) {
-      sessionStorage.removeItem('vera_admin');
+      localStorage.removeItem('vera_admin');
       disableAdminMode();
     }
   } else {
@@ -254,7 +263,7 @@ adminBtn.addEventListener('click', () => {
 
 adminLogin.addEventListener('click', () => {
   if (adminPass.value === ADMIN_PASSWORD) {
-    sessionStorage.setItem('vera_admin', 'yes');
+    localStorage.setItem('vera_admin', 'yes');
     adminModal.classList.remove('show');
     enableAdminMode();
   } else {
@@ -294,17 +303,31 @@ adminSave.addEventListener('click', async () => {
     adminSave.textContent = '✓ Сохранено локально';
   }
 
-  setTimeout(() => adminSave.textContent = '💾 Сохранить', 2000);
+  setTimeout(() => {
+    adminSave.textContent = '💾 Сохранить';
+    // Скрываем панель и показываем кнопку "Редактировать"
+    disableAdminMode();
+  }, 2000);
 });
 
 adminLogout.addEventListener('click', () => {
-  sessionStorage.removeItem('vera_admin');
+  localStorage.removeItem('vera_admin');
   disableAdminMode();
 });
 
-// Если уже залогинен — включаем режим
+// Кнопка "Редактировать" для залогиненных админов
+const editBtn = document.getElementById('editBtn');
+if(editBtn){
+  editBtn.addEventListener('click', () => {
+    enableAdminMode();
+  });
+}
+
+// Если уже залогинен — показываем кнопку "Редактировать"
 if (isAdmin()) {
-  enableAdminMode();
+  if(editBtn) editBtn.style.display = '';
+} else {
+  if(editBtn) editBtn.style.display = 'none';
 }
 
 // ===== ПЛАВНОЕ ПОЯВЛЕНИЕ РАБОТ ПРИ СКРОЛЛЕ =====
