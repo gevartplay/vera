@@ -11,7 +11,7 @@
     "nav-contacts": "Контакты",
     "btn-book": "Записаться",
     "hero-title": "VERONIKA",
-    "hero-subtitle": "Перманентный макияж | РЕСНИЦЫ | ТатУ&nbsp; &nbsp; &nbsp;БРОВИ | МАКИЯЖ",
+    "hero-subtitle": "Перманентный макияж | РЕСНИЦЫ | ТатУ | БРОВИ | МАКИЯЖ",
     "hero-cta": "Записаться в VK",
     "works-title": "Мои работы",
     "work-1-title": "Перманент губ",
@@ -45,14 +45,15 @@
     "work-1": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778834108725_work-1.jpg",
     "work-2": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778869830556_work-2.jpg",
     "work-3": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778869896523_work-3.jfif",
-    "work-4": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778869980941_work-4.jfif",
+    "work-4": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870774718_work-4.jfif",
     "work-5": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870365918_work-5.jpg",
     "work-6": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870138949_work-6.jfif",
     "work-7": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870341653_work-7.png",
     "work-8": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870375916_work-8.jpg",
     "work-9": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870457062_work-9.jfif",
     "work-10": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870489502_work-10.jpg",
-    "work-11": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870506383_work-11.jpg"
+    "work-11": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870506383_work-11.jpg",
+    "work-12": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778871102969_work-12.jpg"
   },
-  "updated": 1778870552134
+  "updated": 1778871851328
 }
