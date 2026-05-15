@@ -63,7 +63,9 @@
     return false;
   }
 
-  function isAdminMode(){ return document.body.classList.contains('admin-mode'); }
+  function isAdminMode(){
+    return localStorage.getItem('vera_admin') === 'yes' && document.body.classList.contains('admin-mode');
+  }
   function keyOf(d){
     const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
     return `${y}-${m}-${day}`;
@@ -410,4 +412,23 @@
   loadCalendarFromGitHub().then(loaded => {
     if(!loaded) renderCalendar();
   });
+
+  // ===== ПОКАЗЫВАЕМ КНОПКУ "РЕДАКТИРОВАТЬ" ЕСЛИ АДМИН ЗАЛОГИНЕН =====
+  const editBtn = document.getElementById('editBtn');
+  if(editBtn && localStorage.getItem('vera_admin') === 'yes'){
+    editBtn.style.display = '';
+  }
+
+  // ===== ОБРАБОТЧИК КНОПКИ "ВЫЙТИ" В КАЛЕНДАРЕ =====
+  const adminLogout = document.getElementById('adminLogout');
+  if(adminLogout){
+    adminLogout.addEventListener('click', () => {
+      localStorage.removeItem('vera_admin');
+      document.body.classList.remove('admin-mode');
+      const adminPanel = document.getElementById('adminPanel');
+      if(adminPanel) adminPanel.classList.remove('show');
+      if(editBtn) editBtn.style.display = 'none';
+      location.reload(); // Перезагружаем страницу чтобы скрыть все админские элементы
+    });
+  }
 })();

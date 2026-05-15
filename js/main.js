@@ -313,6 +313,7 @@ adminSave.addEventListener('click', async () => {
 adminLogout.addEventListener('click', () => {
   localStorage.removeItem('vera_admin');
   disableAdminMode();
+  location.reload(); // Перезагружаем страницу
 });
 
 // Кнопка "Редактировать" для залогиненных админов
