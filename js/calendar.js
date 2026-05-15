@@ -326,6 +326,37 @@
   });
   mo.observe(document.body, { attributes:true, attributeFilter:['class'] });
 
+  // ===== КНОПКА СОХРАНИТЬ В GITHUB =====
+  const calendarSaveBtn = document.getElementById('calendarSave');
+  if(calendarSaveBtn){
+    calendarSaveBtn.addEventListener('click', async ()=>{
+      calendarSaveBtn.textContent = '⏳ Сохранение...';
+      calendarSaveBtn.disabled = true;
+
+      if(window.GitHubSync && typeof window.GitHubSync.isConfigured === 'function' && window.GitHubSync.isConfigured()){
+        try {
+          const existing = await window.GitHubSync.getFile('calendar.json');
+          const sha = existing ? existing.sha : null;
+          await window.GitHubSync.saveFile('calendar.json', JSON.stringify(data, null, 2), 'Update calendar', sha);
+          calendarSaveBtn.textContent = '✓ Сохранено!';
+          setTimeout(() => {
+            calendarSaveBtn.textContent = '💾 Сохранить в GitHub';
+            calendarSaveBtn.disabled = false;
+          }, 2000);
+        } catch(err) {
+          console.error('Ошибка сохранения:', err);
+          alert('Ошибка сохранения в GitHub: ' + err.message);
+          calendarSaveBtn.textContent = '💾 Сохранить в GitHub';
+          calendarSaveBtn.disabled = false;
+        }
+      } else {
+        alert('GitHub не настроен. Войдите как администратор и настройте токен на главной странице.');
+        calendarSaveBtn.textContent = '💾 Сохранить в GitHub';
+        calendarSaveBtn.disabled = false;
+      }
+    });
+  }
+
   // ===== СТАРТ =====
   // Загружаем из GitHub, если не удалось - рендерим локальные данные
   loadCalendarFromGitHub().then(loaded => {
