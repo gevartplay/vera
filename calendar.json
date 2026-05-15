@@ -1,6 +1,6 @@
 {
   "2026-05-16": {
-    "dayOff": true,
+    "dayOff": false,
     "slots": {}
   },
   "2026-05-17": {
@@ -9,6 +9,10 @@
   },
   "2026-05-29": {
     "dayOff": false,
+    "slots": {}
+  },
+  "2026-05-27": {
+    "dayOff": true,
     "slots": {}
   }
 }
