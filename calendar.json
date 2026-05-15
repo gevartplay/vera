@@ -20,7 +20,7 @@
     "slots": {}
   },
   "2026-05-15": {
-    "dayOff": true,
+    "dayOff": false,
     "slots": {}
   }
 }
