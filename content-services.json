@@ -1,0 +1,42 @@
+{
+  "texts": {
+    "site-name": "Veronika",
+    "nav-home": "Главная",
+    "nav-services": "Услуги",
+    "nav-calendar": "Календарь",
+    "nav-about": "Обо мне",
+    "nav-contacts": "Контакты",
+    "btn-book": "Записаться",
+    "services-h1": "Услуги и цены",
+    "services-sub": "Каждая процедура — это произведение искусства",
+    "srv-1-title": "Перманент губ",
+    "srv-1-desc": "Акварельная техника или помадная техника.<div>&nbsp;Процедура длится 1,5-2 часа.</div>",
+    "srv-1-price": "3 000&nbsp;<span style=\"letter-spacing: 0.3px;\">₽</span>&nbsp; | 4 500 ₽",
+    "srv-2-title": "Перманент бровей| Коррекция",
+    "srv-2-desc": "Пудровая техника. Идеальная форма и насыщенность на 2-3 года.<div>Коррекция через 1-1,5 месяца после первой процедуры ОБЯЗАТЕЛЬНО.</div>",
+    "srv-2-price": "3 500 ₽ | 2 500&nbsp;<span style=\"letter-spacing: 0.3px; background-color: rgba(232, 157, 172, 0.1);\">₽</span>",
+    "srv-3-title": "Перманент межреснички или стрелки",
+    "srv-3-desc": "Эффект подводки, открытый взгляд. Деликатно и стильно — без растекающейся туши. Работа занимает 30-40 мин.",
+    "srv-3-price": "3 000 ₽",
+    "srv-4-title": "Художественное тату",
+    "srv-4-desc": "Минимализм, надписи, цветы, графика. Эскиз разрабатывается индивидуально под вас.",
+    "srv-4-price": "от 2 000 ₽",
+    "srv-5-title": "Ламинирование бровей или ресниц",
+    "srv-5-desc": "Эффект держится 1-1,5 месяца. Время работы 1 час.<div>Ламинирование бровей с коррекцией и окрашиванием.</div><div>Ламинирование ресниц с окрашиванием.</div>",
+    "srv-5-price": "1500 ₽",
+    "srv-6-title": "Удаление перманента",
+    "srv-6-desc": "Ремувер или лазер — безопасное удаление неудачного татуажа.",
+    "srv-6-price": "от 2 500 ₽",
+    "cta-title-2": "Готова к преображению?",
+    "cta-btn-2": "Записаться сейчас",
+    "footer-text": "© Вера · Студия перманентного макияжа"
+  },
+  "images": {
+    "srv-1-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845196863_srv-1-img.png",
+    "srv-2-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845899522_srv-2-img.png",
+    "srv-3-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778845973493_srv-3-img.png",
+    "srv-4-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778846974507_srv-4-img.png",
+    "srv-5-img": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778847567789_srv-5-img.png"
+  },
+  "updated": 1778848225290
+}
