@@ -11,7 +11,7 @@
     "nav-contacts": "Контакты",
     "btn-book": "Записаться",
     "hero-title": "VERONIKA",
-    "hero-subtitle": "Перманентный макияж | РЕСНИЦЫ | ТатУ | БРОВИ | МАКИЯЖ",
+    "hero-subtitle": "Перманентный макияж | РЕСНИЦЫ | ТатУ<div>БРОВИ | МАКИЯЖ</div>",
     "hero-cta": "Записаться в VK",
     "works-title": "Мои работы",
     "work-1-title": "Перманент губ",
@@ -55,5 +55,5 @@
     "work-11": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778870506383_work-11.jpg",
     "work-12": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778872626174_work-12.jpeg"
   },
-  "updated": 1778872835158
+  "updated": 1778872869666
 }
