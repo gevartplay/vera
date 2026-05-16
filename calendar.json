@@ -86,5 +86,13 @@
         "status": "break"
       }
     }
+  },
+  "2026-05-18": {
+    "dayOff": false,
+    "slots": {
+      "10": {
+        "status": "break"
+      }
+    }
   }
 }
