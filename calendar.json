@@ -92,6 +92,9 @@
     "slots": {
       "10": {
         "status": "break"
+      },
+      "18": {
+        "status": "break"
       }
     }
   }
