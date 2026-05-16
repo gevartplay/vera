@@ -103,10 +103,10 @@ body.admin-mode .client-only{display:none !important}
 .admin-day-controls button:hover{background:#e89dac;color:#0f0f0f}
 
 .hours-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;
+  display:flex;flex-direction:column;gap:10px;
 }
 .hour-slot{
-  padding:14px 10px;border-radius:6px;text-align:center;
+  padding:14px 16px;border-radius:6px;text-align:left;
   background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);
   color:#a3e9bf;font-size:14px;letter-spacing:1px;cursor:pointer;
   transition:all .3s;position:relative;
@@ -124,6 +124,16 @@ body.admin-mode .client-only{display:none !important}
   background:rgba(120,120,120,.1);border-color:rgba(120,120,120,.3);
   color:#888;
 }
+.hour-slot.hour-marker{
+  background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.05);
+  color:#666;cursor:pointer;padding:8px 16px;
+}
+.hour-slot.hour-marker:hover{background:rgba(74,222,128,.05)}
+.hour-slot.add-slot{
+  background:rgba(74,222,128,.05);border:1px dashed rgba(74,222,128,.4);
+  color:#4ade80;text-align:center;
+}
+.hour-slot.add-slot:hover{background:rgba(74,222,128,.12)}
 .hour-slot .label{display:block;font-size:9px;opacity:.7;margin-top:4px;letter-spacing:.5px}
 .hour-slot .client{
   display:block;font-size:10px;margin-top:4px;opacity:.85;
@@ -163,8 +173,8 @@ body.admin-mode .client-only{display:none !important}
   .day-panel-head h3{font-size:18px}
   .admin-day-controls{gap:8px}
   .admin-day-controls button{padding:8px 14px;font-size:11px}
-  .hours-grid{grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:6px}
-  .hour-slot{padding:10px 6px;font-size:12px}
+  .hours-grid{gap:6px}
+  .hour-slot{padding:10px 12px;font-size:12px}
   .hour-slot .label{font-size:8px;margin-top:3px}
   .hour-slot .client{font-size:9px;margin-top:3px}
   .booking-box{min-width:280px}

@@ -1,14 +1,50 @@
 // ===== ИНТЕРАКТИВНЫЙ КАЛЕНДАРЬ =====
 (function(){
   const WORK_START = 10;   // 10:00
-  const WORK_END   = 20;   // 20:00 (последний слот 19:00-20:00)
-  const STORAGE_KEY = 'vera_calendar_v1';
+  const WORK_END   = 20;   // 20:00
+  const STORAGE_KEY = 'vera_calendar_v2';
   const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь',
                   'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
   // Структура данных:
-  // { "2026-05-14": { dayOff:false, slots:{ "10":{status:"booked",name:"",phone:"",service:"",note:""}, "11":{status:"break"} } } }
+  // { "2026-05-14": { dayOff:false, bookings:[{start:"14:25",end:"15:10",name:"",phone:"",service:"",note:""}], breaks:[{start:"12:00",end:"13:00"}] } }
   let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+  // Миграция старых данных
+  const oldData = JSON.parse(localStorage.getItem('vera_calendar_v1') || '{}');
+  if(Object.keys(oldData).length > 0 && Object.keys(data).length === 0){
+    console.log('Миграция данных из старого формата...');
+    Object.keys(oldData).forEach(dateKey => {
+      const oldDay = oldData[dateKey];
+      const newDay = { dayOff: oldDay.dayOff || false, bookings: [], breaks: [] };
+
+      if(oldDay.slots){
+        Object.keys(oldDay.slots).forEach(hour => {
+          const slot = oldDay.slots[hour];
+          const startTime = `${String(hour).padStart(2,'0')}:00`;
+          const endTime = `${String(parseInt(hour)+1).padStart(2,'0')}:00`;
+
+          if(slot.status === 'booked'){
+            newDay.bookings.push({
+              start: startTime,
+              end: endTime,
+              name: slot.name || '',
+              phone: slot.phone || '',
+              service: slot.service || '',
+              note: slot.note || ''
+            });
+          } else if(slot.status === 'break'){
+            newDay.breaks.push({ start: startTime, end: endTime });
+          }
+        });
+      }
+
+      data[dateKey] = newDay;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    console.log('✓ Миграция завершена');
+  }
+
   let viewDate = new Date();
   viewDate.setDate(1);
   let selectedKey = null;
@@ -24,19 +60,16 @@
         const sha = existing ? existing.sha : null;
         await window.GitHubSync.saveFile('calendar.json', JSON.stringify(data, null, 2), 'Update calendar', sha);
         console.log('✓ Календарь синхронизирован с GitHub');
-        // Только после успешной отправки в GitHub сохраняем локально
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       } catch(err) {
         console.error('❌ Не удалось синхронизировать календарь с GitHub:', err);
-        // Откатываем изменения
         data = oldData;
         renderCalendar();
         if(selectedKey) renderHours();
         alert('Ошибка сохранения в GitHub. Изменения отменены.\n\n' + err.message);
-        throw err; // Пробрасываем ошибку дальше
+        throw err;
       }
     } else {
-      // Если GitHub не настроен - сохраняем только локально
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       console.warn('⚠ GitHub не настроен. Данные сохранены только локально.');
     }
@@ -66,27 +99,50 @@
   function isAdminMode(){
     return localStorage.getItem('vera_admin') === 'yes' && document.body.classList.contains('admin-mode');
   }
+
   function keyOf(d){
     const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
     return `${y}-${m}-${day}`;
   }
+
   function ensureDay(k){
-    if(!data[k]) data[k] = { dayOff:false, slots:{} };
+    if(!data[k]) data[k] = { dayOff:false, bookings:[], breaks:[] };
     return data[k];
   }
+
   function isPast(d){
     const t=new Date(); t.setHours(0,0,0,0);
     return d < t;
   }
+
+  // Конвертация времени в минуты от начала дня
+  function timeToMinutes(timeStr){
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  // Подсчет занятого времени в минутах
   function dayStats(k){
     const d = data[k];
-    if(!d) return { off:false, booked:0, breaks:0, total: WORK_END-WORK_START };
-    let booked=0, breaks=0;
-    Object.values(d.slots||{}).forEach(s=>{
-      if(s.status==='booked') booked++;
-      else if(s.status==='break') breaks++;
+    if(!d) return { off:false, bookedMinutes:0, breakMinutes:0, bookingCount:0 };
+
+    let bookedMinutes = 0;
+    let breakMinutes = 0;
+
+    (d.bookings || []).forEach(b => {
+      bookedMinutes += timeToMinutes(b.end) - timeToMinutes(b.start);
     });
-    return { off:!!d.dayOff, booked, breaks, total: WORK_END-WORK_START };
+
+    (d.breaks || []).forEach(b => {
+      breakMinutes += timeToMinutes(b.end) - timeToMinutes(b.start);
+    });
+
+    return {
+      off: !!d.dayOff,
+      bookedMinutes,
+      breakMinutes,
+      bookingCount: (d.bookings || []).length
+    };
   }
 
   // ===== РЕНДЕР СЕТКИ =====
@@ -99,7 +155,6 @@
     const month = viewDate.getMonth();
     monthLabel.textContent = `${MONTHS[month]} ${year}`;
 
-    // первый день месяца (Пн=0)
     let first = new Date(year, month, 1).getDay();
     first = first===0 ? 6 : first-1;
     const daysInMonth = new Date(year, month+1, 0).getDate();
@@ -122,9 +177,12 @@
       if(dateObj.getTime()===today.getTime()) cell.classList.add('today');
 
       const stats = dayStats(k);
+      const totalWorkMinutes = (WORK_END - WORK_START) * 60;
+      const busyMinutes = stats.bookedMinutes + stats.breakMinutes;
+
       if(stats.off) cell.classList.add('day-off');
-      else if(stats.booked + stats.breaks >= stats.total) cell.classList.add('fully-busy');
-      if(stats.booked>0 && isAdminMode()) cell.classList.add('has-bookings');
+      else if(busyMinutes >= totalWorkMinutes) cell.classList.add('fully-busy');
+      if(stats.bookingCount > 0 && isAdminMode()) cell.classList.add('has-bookings');
 
       const num = document.createElement('span');
       num.className='num'; num.textContent = d;
@@ -134,10 +192,19 @@
       info.className='info';
       if(stats.off) info.textContent = 'выходной';
       else {
-        const free = stats.total - stats.booked - stats.breaks;
-        if(isAdminMode() && stats.booked>0) info.textContent = `${stats.booked} зап.`;
-        else if(free===0) info.textContent = 'занято';
-        else info.textContent = `${free} ч свободно`;
+        const freeMinutes = totalWorkMinutes - busyMinutes;
+        const freeHours = Math.floor(freeMinutes / 60);
+        const freeMins = freeMinutes % 60;
+
+        if(isAdminMode() && stats.bookingCount > 0) {
+          info.textContent = `${stats.bookingCount} зап.`;
+        } else if(freeMinutes <= 0) {
+          info.textContent = 'занято';
+        } else if(freeMins === 0) {
+          info.textContent = `${freeHours} ч свободно`;
+        } else {
+          info.textContent = `${freeHours}ч ${freeMins}м свободно`;
+        }
       }
       cell.appendChild(info);
 
@@ -165,46 +232,102 @@
 
   function renderHours(){
     hoursGrid.innerHTML='';
-    const day = data[selectedKey] || { dayOff:false, slots:{} };
+    const day = data[selectedKey] || { dayOff:false, bookings:[], breaks:[] };
 
     if(day.dayOff){
       hoursGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;opacity:.6">🌙 В этот день не работаю</div>';
       return;
     }
 
-    for(let h=WORK_START; h<WORK_END; h++){
-      const slot = day.slots && day.slots[h];
-      const el = document.createElement('div');
-      el.className = 'hour-slot';
-      el.dataset.hour = h;
+    // Создаем временную шкалу
+    const timeline = [];
+    for(let h = WORK_START; h < WORK_END; h++){
+      timeline.push({
+        type: 'hour',
+        hour: h,
+        label: `${String(h).padStart(2,'0')}:00`
+      });
+    }
 
-      const timeLabel = `${String(h).padStart(2,'0')}:00`;
-      let html = timeLabel;
+    // Добавляем записи клиентов
+    (day.bookings || []).forEach((booking, idx) => {
+      timeline.push({
+        type: 'booking',
+        data: booking,
+        index: idx
+      });
+    });
 
-      if(slot && slot.status==='booked'){
-        el.classList.add(isAdminMode() ? 'booked' : 'busy');
+    // Добавляем перерывы
+    (day.breaks || []).forEach((brk, idx) => {
+      timeline.push({
+        type: 'break',
+        data: brk,
+        index: idx
+      });
+    });
+
+    // Сортируем по времени начала
+    timeline.sort((a, b) => {
+      let timeA, timeB;
+      if(a.type === 'hour') timeA = a.hour * 60;
+      else timeA = timeToMinutes(a.data.start);
+
+      if(b.type === 'hour') timeB = b.hour * 60;
+      else timeB = timeToMinutes(b.data.start);
+
+      return timeA - timeB;
+    });
+
+    // Рендерим элементы
+    timeline.forEach(item => {
+      if(item.type === 'hour'){
+        // Показываем часовые метки только в режиме админа
         if(isAdminMode()){
-          html += `<span class="client">${escapeHtml(slot.name||'клиент')}</span>`;
-          if(slot.service) html += `<span class="label">${escapeHtml(slot.service)}</span>`;
+          const el = document.createElement('div');
+          el.className = 'hour-slot hour-marker';
+          el.innerHTML = `<span style="opacity:0.5;font-size:12px">${item.label}</span>`;
+          el.addEventListener('click', ()=> openBookingModal());
+          hoursGrid.appendChild(el);
+        }
+      } else if(item.type === 'booking'){
+        const b = item.data;
+        const el = document.createElement('div');
+        el.className = isAdminMode() ? 'hour-slot booked' : 'hour-slot busy';
+
+        let html = `<strong>${b.start} — ${b.end}</strong>`;
+        if(isAdminMode()){
+          html += `<span class="client">${escapeHtml(b.name||'клиент')}</span>`;
+          if(b.service) html += `<span class="label">${escapeHtml(b.service)}</span>`;
         } else {
           html += `<span class="label">занято</span>`;
         }
-      } else if(slot && slot.status==='break'){
-        el.classList.add('break');
-        html += `<span class="label">перерыв</span>`;
-      } else {
-        html += `<span class="label">свободно</span>`;
+
+        el.innerHTML = html;
+        if(isAdminMode()){
+          el.addEventListener('click', ()=> openBookingModal(item.index));
+        }
+        hoursGrid.appendChild(el);
+      } else if(item.type === 'break'){
+        const b = item.data;
+        const el = document.createElement('div');
+        el.className = 'hour-slot break';
+        el.innerHTML = `<strong>${b.start} — ${b.end}</strong><span class="label">перерыв</span>`;
+        if(isAdminMode()){
+          el.addEventListener('click', ()=> openBreakModal(item.index));
+        }
+        hoursGrid.appendChild(el);
       }
+    });
 
-      el.innerHTML = html;
-      el.addEventListener('click', ()=> onSlotClick(h));
-      hoursGrid.appendChild(el);
+    // Кнопка добавления записи для админа
+    if(isAdminMode()){
+      const addBtn = document.createElement('div');
+      addBtn.className = 'hour-slot add-slot';
+      addBtn.innerHTML = '<strong>+ Добавить запись</strong>';
+      addBtn.addEventListener('click', ()=> openBookingModal());
+      hoursGrid.appendChild(addBtn);
     }
-  }
-
-  function onSlotClick(h){
-    if(!isAdminMode()) return; // клиент только смотрит
-    openBookingModal(h);
   }
 
   // ===== АДМИН: BOOKING MODAL =====
@@ -217,60 +340,153 @@
   const bookingSave = document.getElementById('bookingSave');
   const bookingDelete = document.getElementById('bookingDelete');
   const bookingCancel = document.getElementById('bookingCancel');
-  let editingHour = null;
+  let editingBookingIndex = null;
 
-  function openBookingModal(h){
-    editingHour = h;
+  function openBookingModal(bookingIndex = null){
+    editingBookingIndex = bookingIndex;
     const day = ensureDay(selectedKey);
-    const slot = day.slots[h] || {};
-    bookingSlotInfo.textContent = `${selectedKey} · ${String(h).padStart(2,'0')}:00 — ${String(h+1).padStart(2,'0')}:00`;
-    clientName.value = slot.name || '';
-    clientPhone.value = slot.phone || '';
-    clientService.value = slot.service || 'Перманент губ';
-    clientNote.value = slot.note || '';
 
-    // Кнопка перерыва — добавим динамически
-    let breakBtn = document.getElementById('toggleBreakBtn');
-    if(!breakBtn){
-      breakBtn = document.createElement('button');
-      breakBtn.id='toggleBreakBtn';
-      breakBtn.style.cssText='background:#2a2a2a;color:#ccc;border:1px solid #444';
-      document.querySelector('.booking-btns').insertBefore(breakBtn, bookingCancel);
+    // Удаляем старые поля времени если есть
+    document.querySelectorAll('.time-inputs').forEach(el => el.remove());
+
+    // Создаем поля для ввода времени
+    const timeInputs = document.createElement('div');
+    timeInputs.className = 'time-inputs';
+    timeInputs.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px';
+
+    const startInput = document.createElement('input');
+    startInput.type = 'time';
+    startInput.id = 'bookingStartTime';
+    startInput.placeholder = 'Начало';
+    startInput.style.cssText = 'padding:10px;border:1px solid #444;background:#1a1a1a;color:#fff;border-radius:4px';
+
+    const endInput = document.createElement('input');
+    endInput.type = 'time';
+    endInput.id = 'bookingEndTime';
+    endInput.placeholder = 'Конец';
+    endInput.style.cssText = 'padding:10px;border:1px solid #444;background:#1a1a1a;color:#fff;border-radius:4px';
+
+    timeInputs.appendChild(startInput);
+    timeInputs.appendChild(endInput);
+
+    // Вставляем поля времени перед полем имени
+    clientName.parentNode.insertBefore(timeInputs, clientName);
+
+    if(bookingIndex !== null && day.bookings[bookingIndex]){
+      const booking = day.bookings[bookingIndex];
+      bookingSlotInfo.textContent = `${selectedKey} · Редактирование записи`;
+      startInput.value = booking.start;
+      endInput.value = booking.end;
+      clientName.value = booking.name || '';
+      clientPhone.value = booking.phone || '';
+      clientService.value = booking.service || 'Перманент губ';
+      clientNote.value = booking.note || '';
+      bookingDelete.style.display = '';
+    } else {
+      bookingSlotInfo.textContent = `${selectedKey} · Новая запись`;
+      const now = new Date();
+      const roundedHour = Math.ceil(now.getHours());
+      startInput.value = `${String(Math.max(WORK_START, Math.min(roundedHour, WORK_END-1))).padStart(2,'0')}:00`;
+      endInput.value = `${String(Math.max(WORK_START+1, Math.min(roundedHour+1, WORK_END))).padStart(2,'0')}:00`;
+      clientName.value = '';
+      clientPhone.value = '';
+      clientService.value = 'Перманент губ';
+      clientNote.value = '';
+      bookingDelete.style.display = 'none';
     }
-    breakBtn.textContent = slot.status==='break' ? '✕ Убрать перерыв' : '☕ Перерыв';
-    breakBtn.onclick = ()=>{
-      if(slot.status==='break'){ delete day.slots[h]; }
-      else { day.slots[h] = { status:'break' }; }
-      save(); bookingModal.classList.remove('show'); renderHours(); renderCalendar();
-    };
 
-    bookingDelete.style.display = slot.status==='booked' ? '' : 'none';
     bookingModal.classList.add('show');
-    setTimeout(()=>clientName.focus(),50);
+    setTimeout(()=>startInput.focus(),50);
   }
 
   bookingSave.addEventListener('click', ()=>{
-    if(!clientName.value.trim()){ alert('Укажи имя клиента'); return; }
+    const startTime = document.getElementById('bookingStartTime').value;
+    const endTime = document.getElementById('bookingEndTime').value;
+
+    if(!startTime || !endTime){
+      alert('Укажи время начала и конца записи');
+      return;
+    }
+
+    if(timeToMinutes(startTime) >= timeToMinutes(endTime)){
+      alert('Время окончания должно быть позже времени начала');
+      return;
+    }
+
+    if(!clientName.value.trim()){
+      alert('Укажи имя клиента');
+      return;
+    }
+
     const day = ensureDay(selectedKey);
-    day.slots[editingHour] = {
-      status:'booked',
+    const booking = {
+      start: startTime,
+      end: endTime,
       name: clientName.value.trim(),
       phone: clientPhone.value.trim(),
       service: clientService.value,
       note: clientNote.value.trim()
     };
-    save(); bookingModal.classList.remove('show');
-    renderHours(); renderCalendar();
+
+    if(editingBookingIndex !== null){
+      day.bookings[editingBookingIndex] = booking;
+    } else {
+      if(!day.bookings) day.bookings = [];
+      day.bookings.push(booking);
+    }
+
+    save();
+    bookingModal.classList.remove('show');
+    renderHours();
+    renderCalendar();
   });
 
   bookingDelete.addEventListener('click', ()=>{
+    if(!confirm('Удалить эту запись?')) return;
     const day = ensureDay(selectedKey);
-    delete day.slots[editingHour];
-    save(); bookingModal.classList.remove('show');
-    renderHours(); renderCalendar();
+    day.bookings.splice(editingBookingIndex, 1);
+    save();
+    bookingModal.classList.remove('show');
+    renderHours();
+    renderCalendar();
   });
 
   bookingCancel.addEventListener('click', ()=> bookingModal.classList.remove('show'));
+
+  // ===== АДМИН: BREAK MODAL =====
+  let editingBreakIndex = null;
+
+  function openBreakModal(breakIndex = null){
+    editingBreakIndex = breakIndex;
+    const day = ensureDay(selectedKey);
+
+    const startTime = breakIndex !== null ? day.breaks[breakIndex].start : '12:00';
+    const endTime = breakIndex !== null ? day.breaks[breakIndex].end : '13:00';
+
+    const newStart = prompt(`Начало перерыва (ЧЧ:ММ):`, startTime);
+    if(!newStart) return;
+
+    const newEnd = prompt(`Конец перерыва (ЧЧ:ММ):`, endTime);
+    if(!newEnd) return;
+
+    if(timeToMinutes(newStart) >= timeToMinutes(newEnd)){
+      alert('Время окончания должно быть позже времени начала');
+      return;
+    }
+
+    const brk = { start: newStart, end: newEnd };
+
+    if(breakIndex !== null){
+      day.breaks[breakIndex] = brk;
+    } else {
+      if(!day.breaks) day.breaks = [];
+      day.breaks.push(brk);
+    }
+
+    save();
+    renderHours();
+    renderCalendar();
+  }
 
   // ===== АДМИН: УПРАВЛЕНИЕ ДНЁМ =====
   document.getElementById('toggleDayOff').addEventListener('click', ()=>{
@@ -281,7 +497,7 @@
 
   document.getElementById('clearDay').addEventListener('click', ()=>{
     if(!confirm('Очистить все записи и перерывы этого дня?')) return;
-    data[selectedKey] = { dayOff:false, slots:{} };
+    data[selectedKey] = { dayOff:false, bookings:[], breaks:[] };
     save(); renderHours(); renderCalendar();
   });
 
@@ -299,12 +515,40 @@
     viewDate.setMonth(viewDate.getMonth()+1); renderCalendar();
   });
 
-  // ===== ЭКСПОРТ / ИМПОРТ (резервная копия) =====
+  // ===== ЭКСПОРТ / ИМПОРТ =====
   const exportBtn = document.getElementById('adminExport');
+  const exportJSONBtn = document.getElementById('adminExportJSON');
   const importBtn = document.getElementById('adminImport');
   const importFile = document.getElementById('importFile');
 
   if(exportBtn) exportBtn.addEventListener('click', ()=>{
+    // Экспорт истории в читаемом формате
+    let text = 'ИСТОРИЯ ЗАПИСЕЙ\n\n';
+    const sortedDates = Object.keys(data).sort();
+
+    sortedDates.forEach(dateKey => {
+      const day = data[dateKey];
+      if(day.bookings && day.bookings.length > 0){
+        text += `${dateKey}:\n`;
+        day.bookings.forEach(b => {
+          text += `  ${b.start}-${b.end}: ${b.name}`;
+          if(b.phone) text += ` (${b.phone})`;
+          if(b.service) text += ` — ${b.service}`;
+          if(b.note) text += `\n    Заметка: ${b.note}`;
+          text += '\n';
+        });
+        text += '\n';
+      }
+    });
+
+    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download = `vera-history-${keyOf(new Date())}.txt`;
+    a.click(); URL.revokeObjectURL(url);
+  });
+
+  if(exportJSONBtn) exportJSONBtn.addEventListener('click', ()=>{
     const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -333,7 +577,6 @@
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
   // ===== ПЕРЕРЕНДЕР ПРИ СМЕНЕ РЕЖИМА АДМИНА =====
-  // main.js переключает класс admin-mode на body — слушаем мутации
   const mo = new MutationObserver(()=>{
     renderCalendar();
     if(selectedKey) renderHours();
@@ -341,7 +584,6 @@
   mo.observe(document.body, { attributes:true, attributeFilter:['class'] });
 
   // ===== КНОПКА НАСТРОЙКИ ТОКЕНА =====
-  // Используем делегирование событий для надёжности
   document.addEventListener('click', (e) => {
     if(e.target && e.target.id === 'setupGitHubToken'){
       e.preventDefault();
@@ -359,7 +601,7 @@
         `Оставьте пустым для отмены.`
       );
 
-      if(token === null || token === '') return; // Отмена
+      if(token === null || token === '') return;
 
       if(!token.startsWith('ghp_') && !token.startsWith('github_pat_')){
         alert('❌ Неправильный формат токена!\n\nТокен должен начинаться с:\n- ghp_ (Classic token)\n- github_pat_ (Fine-grained token)');
@@ -408,7 +650,6 @@
   }
 
   // ===== СТАРТ =====
-  // Загружаем из GitHub, если не удалось - рендерим локальные данные
   loadCalendarFromGitHub().then(loaded => {
     if(!loaded) renderCalendar();
   });
@@ -428,7 +669,7 @@
       const adminPanel = document.getElementById('adminPanel');
       if(adminPanel) adminPanel.classList.remove('show');
       if(editBtn) editBtn.style.display = 'none';
-      location.reload(); // Перезагружаем страницу чтобы скрыть все админские элементы
+      location.reload();
     });
   }
 })();
