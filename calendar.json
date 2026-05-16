@@ -51,7 +51,17 @@
   },
   "2026-05-29": {
     "dayOff": false,
-    "slots": {}
+    "slots": {},
+    "bookings": [
+      {
+        "start": "15:00",
+        "end": "16:00",
+        "name": "Катя Юркова",
+        "phone": "",
+        "service": "Другое",
+        "note": "Макияж"
+      }
+    ]
   },
   "2026-05-27": {
     "dayOff": false,
