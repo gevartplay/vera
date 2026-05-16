@@ -149,5 +149,19 @@
     "dayOff": false,
     "bookings": [],
     "breaks": []
+  },
+  "2026-05-21": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "12:00",
+        "end": "15:00",
+        "name": "Нина Димитриченко",
+        "phone": "",
+        "service": "Другое",
+        "note": "Обновление ПМ всех зон 8000₽"
+      }
+    ],
+    "breaks": []
   }
 }
