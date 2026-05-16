@@ -133,5 +133,19 @@
         "status": "break"
       }
     }
+  },
+  "2026-05-23": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "17:50",
+        "end": "18:07",
+        "name": "Ggdf",
+        "phone": "",
+        "service": "Перманент губ",
+        "note": ""
+      }
+    ],
+    "breaks": []
   }
 }
