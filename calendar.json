@@ -109,6 +109,9 @@
     "slots": {
       "10": {
         "status": "break"
+      },
+      "19": {
+        "status": "break"
       }
     }
   }
