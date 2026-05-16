@@ -82,6 +82,13 @@
       "10": {
         "status": "break"
       },
+      "11": {
+        "status": "booked",
+        "name": "Овсянкина Настя",
+        "phone": "",
+        "service": "Художественное тату",
+        "note": "4500 руб"
+      },
       "18": {
         "status": "break"
       },
