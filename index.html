@@ -53,7 +53,7 @@
   overflow: hidden;
   z-index: 1;
   transition: opacity 0.8s ease;
-  background: #000;
+  background: #000 url('frames/frame_0001.jpg') center/cover no-repeat;
 }
 
 /* Размытый фон - только для мобильных */
@@ -76,6 +76,18 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Градиентная маска для плавного перехода видео на мобильных */
+.canvas-mask {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Градиенты - только для мобильных */
@@ -115,7 +127,7 @@
 
 .video-text-content {
   text-align: center;
-  padding: 40px;
+  padding: 40px 20px;
   max-width: 900px;
   opacity: 0;
   transform: translateY(30px);
@@ -134,7 +146,10 @@
   line-height: 1.1;
   letter-spacing: -2px;
   margin-bottom: 30px;
-  text-shadow: 0 8px 40px rgba(0,0,0,0.95);
+  text-shadow:
+    0 2px 10px rgba(0,0,0,0.8),
+    0 4px 20px rgba(0,0,0,0.6),
+    0 8px 40px rgba(0,0,0,0.4);
   animation: fadeInUp 1s ease forwards;
   opacity: 0;
 }
@@ -149,7 +164,9 @@
   letter-spacing: 4px;
   text-transform: uppercase;
   margin-bottom: 40px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.95);
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.8),
+    0 4px 16px rgba(0,0,0,0.6);
   animation: fadeInUp 1.2s ease forwards;
   animation-delay: 0.2s;
   opacity: 0;
@@ -163,18 +180,20 @@
 .video-cta-button {
   display: inline-block;
   padding: 20px 50px;
-  border: 2px solid #fff;
+  border: 2px solid rgba(255,255,255,0.9);
   border-radius: 50px;
   font-size: 13px;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(10px);
   text-decoration: none;
   pointer-events: auto;
   transition: all 0.4s;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.6),
+    0 8px 40px rgba(0,0,0,0.3);
   animation: fadeInUp 1.4s ease forwards;
   animation-delay: 0.4s;
   opacity: 0;
@@ -238,6 +257,12 @@
     display: block;
   }
 
+  /* Градиентная маска для плавного перехода */
+  .canvas-mask {
+    display: block;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.6) 100%);
+  }
+
   /* Canvas 16:9 по центру */
   #hero-canvas {
     top: 50%;
@@ -250,25 +275,29 @@
   }
 
   .video-text-content {
-    padding: 20px;
+    padding: 15px;
+    max-width: 95%;
   }
 
   .video-text-content h1,
   .video-text-content h2 {
-    font-size: clamp(32px, 12vw, 60px);
+    font-size: clamp(28px, 9vw, 48px);
     letter-spacing: -1px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    line-height: 1.2;
   }
 
   .video-text-content p {
-    font-size: clamp(11px, 3.5vw, 14px);
+    font-size: clamp(10px, 3vw, 13px);
     letter-spacing: 2px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    line-height: 1.5;
   }
 
   .video-cta-button {
-    padding: 16px 35px;
+    padding: 14px 30px;
     font-size: 11px;
+    letter-spacing: 2px;
   }
 }
 </style>
@@ -300,6 +329,7 @@
   <div class="sticky-canvas-wrapper">
     <canvas class="canvas-background" id="hero-canvas-bg"></canvas>
     <canvas id="hero-canvas"></canvas>
+    <div class="canvas-mask"></div>
     <div class="canvas-gradient-top"></div>
     <div class="canvas-gradient-bottom"></div>
   </div>
