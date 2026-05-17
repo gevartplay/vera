@@ -53,7 +53,7 @@
   overflow: hidden;
   z-index: 1;
   transition: opacity 0.8s ease;
-  background: #000 url('frames/frame_0001.jpg') center/cover no-repeat;
+  background: #000;
 }
 
 /* Размытый фон - только для мобильных */
@@ -482,6 +482,11 @@ for (let i = 0; i < frameCount; i++) {
     imagesLoaded++;
     const percent = Math.round((imagesLoaded / frameCount) * 100);
     videoLoaderProgress.textContent = percent + '%';
+
+    // Отрисовываем первый кадр сразу как загрузился
+    if (i === 0) {
+      updateImage(0);
+    }
 
     if (imagesLoaded === frameCount) {
       setTimeout(() => {
