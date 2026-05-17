@@ -74,7 +74,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('frames/frame_0001.jpg') center/cover no-repeat;
+  background: url('frames/frame_0005.jpg') center/cover no-repeat;
   filter: blur(40px);
   transform: scale(1.1);
   opacity: 0.6;
@@ -89,7 +89,7 @@
   max-height: 100%;
   width: auto;
   height: auto;
-  background: url('frames/frame_0001.jpg') center/contain no-repeat;
+  background: url('frames/frame_0005.jpg') center/contain no-repeat;
 }
 
 /* Размытый фон для видео */
@@ -518,8 +518,8 @@ const context = canvas.getContext('2d');
 const canvasBg = document.getElementById('hero-canvas-bg');
 const contextBg = canvasBg.getContext('2d');
 
-const frameCount = 181;
-const currentFrame = index => `frames/frame_${String(index + 1).padStart(4, '0')}.jpg`;
+const frameCount = 173;
+const currentFrame = index => `frames/frame_${String(index + 5).padStart(4, '0')}.jpg`;
 
 const images = [];
 let imagesLoaded = 0;
