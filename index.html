@@ -56,7 +56,7 @@
   background: #000;
 }
 
-/* Размытый фон */
+/* Размытый фон - только для мобильных */
 .canvas-background {
   position: absolute;
   top: 0;
@@ -65,42 +65,39 @@
   height: 100%;
   filter: blur(40px);
   transform: scale(1.1);
-  opacity: 0.6;
+  opacity: 0;
+  display: none;
 }
 
-/* Основной canvas 16:9 */
+/* Основной canvas */
 #hero-canvas {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-}
-
-/* Градиенты сверху и снизу */
-.canvas-gradient-top {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Градиенты - только для мобильных */
+.canvas-gradient-top,
+.canvas-gradient-bottom {
+  display: none;
+  position: absolute;
+  left: 0;
   right: 0;
   height: 150px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
   z-index: 2;
   pointer-events: none;
 }
 
+.canvas-gradient-top {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+}
+
 .canvas-gradient-bottom {
-  position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
-  height: 150px;
   background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-  z-index: 2;
-  pointer-events: none;
 }
 
 .video-text-overlay {
@@ -132,11 +129,11 @@
 
 .video-text-content h1,
 .video-text-content h2 {
-  font-size: clamp(36px, 10vw, 120px);
+  font-size: clamp(48px, 8vw, 120px);
   font-weight: 200;
-  line-height: 1.2;
-  letter-spacing: -1px;
-  margin-bottom: 20px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
   text-shadow: 0 8px 40px rgba(0,0,0,0.95);
   animation: fadeInUp 1s ease forwards;
   opacity: 0;
@@ -148,15 +145,14 @@
 }
 
 .video-text-content p {
-  font-size: clamp(11px, 3vw, 16px);
-  letter-spacing: clamp(2px, 0.5vw, 4px);
+  font-size: 16px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   text-shadow: 0 4px 20px rgba(0,0,0,0.95);
   animation: fadeInUp 1.2s ease forwards;
   animation-delay: 0.2s;
   opacity: 0;
-  line-height: 1.6;
 }
 
 .video-text-content.active p {
@@ -166,14 +162,14 @@
 
 .video-cta-button {
   display: inline-block;
-  padding: clamp(14px, 3vw, 20px) clamp(30px, 6vw, 50px);
+  padding: 20px 50px;
   border: 2px solid #fff;
   border-radius: 50px;
-  font-size: clamp(11px, 2.5vw, 13px);
-  letter-spacing: clamp(2px, 0.5vw, 3px);
+  font-size: 13px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
   text-decoration: none;
   pointer-events: auto;
@@ -231,6 +227,28 @@
     height: 400vh;
   }
 
+  /* Показываем размытый фон и градиенты только на мобильных */
+  .canvas-background {
+    display: block;
+    opacity: 0.6;
+  }
+
+  .canvas-gradient-top,
+  .canvas-gradient-bottom {
+    display: block;
+  }
+
+  /* Canvas 16:9 по центру */
+  #hero-canvas {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
   .video-text-content {
     padding: 20px;
   }
@@ -238,19 +256,19 @@
   .video-text-content h1,
   .video-text-content h2 {
     font-size: clamp(32px, 12vw, 60px);
-    letter-spacing: -0.5px;
-    margin-bottom: 15px;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
   }
 
   .video-text-content p {
-    font-size: clamp(10px, 3.5vw, 14px);
-    letter-spacing: clamp(1px, 0.3vw, 2px);
-    margin-bottom: 25px;
+    font-size: clamp(11px, 3.5vw, 14px);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
   }
 
-  .canvas-gradient-top,
-  .canvas-gradient-bottom {
-    height: 120px;
+  .video-cta-button {
+    padding: 16px 35px;
+    font-size: 11px;
   }
 }
 </style>
@@ -454,22 +472,29 @@ function setCanvasSize() {
     return;
   }
 
-  // Размытый фон на весь экран
-  canvasBg.width = window.innerWidth;
-  canvasBg.height = window.innerHeight;
+  const isMobile = window.innerWidth <= 768;
 
-  // Основной canvas 16:9
-  const imgRatio = 16 / 9;
-  const windowRatio = window.innerWidth / window.innerHeight;
+  if (isMobile) {
+    // Мобильная версия: размытый фон + 16:9 canvas
+    canvasBg.width = window.innerWidth;
+    canvasBg.height = window.innerHeight;
 
-  if (windowRatio > imgRatio) {
-    // Окно шире чем 16:9
-    canvas.height = window.innerHeight;
-    canvas.width = canvas.height * imgRatio;
+    const imgRatio = 16 / 9;
+    const windowRatio = window.innerWidth / window.innerHeight;
+
+    if (windowRatio > imgRatio) {
+      canvas.height = window.innerHeight;
+      canvas.width = canvas.height * imgRatio;
+    } else {
+      canvas.width = window.innerWidth;
+      canvas.height = canvas.width / imgRatio;
+    }
   } else {
-    // Окно выше чем 16:9
+    // PC версия: canvas на весь экран
     canvas.width = window.innerWidth;
-    canvas.height = canvas.width / imgRatio;
+    canvas.height = window.innerHeight;
+    canvasBg.width = 0;
+    canvasBg.height = 0;
   }
 }
 
@@ -480,31 +505,55 @@ window.addEventListener('resize', setCanvasSize);
 function updateImage(index) {
   if (images[index] && images[index].complete) {
     const img = images[index];
+    const isMobile = window.innerWidth <= 768;
 
-    // Размытый фон
-    contextBg.clearRect(0, 0, canvasBg.width, canvasBg.height);
-    const bgRatio = canvasBg.width / canvasBg.height;
-    const imgRatio = img.width / img.height;
+    if (isMobile) {
+      // Мобильная версия: размытый фон
+      contextBg.clearRect(0, 0, canvasBg.width, canvasBg.height);
+      const bgRatio = canvasBg.width / canvasBg.height;
+      const imgRatio = img.width / img.height;
 
-    let bgWidth, bgHeight, bgX, bgY;
+      let bgWidth, bgHeight, bgX, bgY;
 
-    if (bgRatio > imgRatio) {
-      bgWidth = canvasBg.width;
-      bgHeight = canvasBg.width / imgRatio;
-      bgX = 0;
-      bgY = (canvasBg.height - bgHeight) / 2;
+      if (bgRatio > imgRatio) {
+        bgWidth = canvasBg.width;
+        bgHeight = canvasBg.width / imgRatio;
+        bgX = 0;
+        bgY = (canvasBg.height - bgHeight) / 2;
+      } else {
+        bgHeight = canvasBg.height;
+        bgWidth = canvasBg.height * imgRatio;
+        bgX = (canvasBg.width - bgWidth) / 2;
+        bgY = 0;
+      }
+
+      contextBg.drawImage(img, bgX, bgY, bgWidth, bgHeight);
+
+      // Основной canvas (16:9)
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
     } else {
-      bgHeight = canvasBg.height;
-      bgWidth = canvasBg.height * imgRatio;
-      bgX = (canvasBg.width - bgWidth) / 2;
-      bgY = 0;
+      // PC версия: canvas cover
+      const canvasRatio = canvas.width / canvas.height;
+      const imgRatio = img.width / img.height;
+
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (canvasRatio > imgRatio) {
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / imgRatio;
+        offsetX = 0;
+        offsetY = (canvas.height - drawHeight) / 2;
+      } else {
+        drawHeight = canvas.height;
+        drawWidth = canvas.height * imgRatio;
+        offsetX = (canvas.width - drawWidth) / 2;
+        offsetY = 0;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     }
-
-    contextBg.drawImage(img, bgX, bgY, bgWidth, bgHeight);
-
-    // Основной canvas (16:9)
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(img, 0, 0, canvas.width, canvas.height);
   }
 }
 
