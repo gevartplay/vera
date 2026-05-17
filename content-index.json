@@ -1,16 +1,13 @@
 {
   "texts": {
-    "loader-year-end": "2015",
-    "loader-year-start": "2026",
-    "loader-name": "VERA",
-    "site-name": "Veronika",
+    "site-name": "𝕍𝔼ℝ𝕆ℕ𝕀𝕂𝔸",
     "nav-home": "Главная",
     "nav-services": "Услуги",
     "nav-calendar": "Календарь",
     "nav-about": "Обо мне",
     "nav-contacts": "Контакты",
     "btn-book": "Записаться",
-    "hero-title": "VERONIKA",
+    "hero-title": "𝕍𝔼ℝ𝕆ℕ𝕀𝕂𝔸",
     "hero-subtitle": "Перманентный макияж | РЕСНИЦЫ | ТатУ<div>БРОВИ | МАКИЯЖ</div>",
     "hero-cta": "Записаться в VK",
     "works-title": "Мои работы",
@@ -55,5 +52,5 @@
     "work-11": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778873171330_work-11.jfif",
     "work-12": "https://raw.githubusercontent.com/gevartplay/vera/main/images/img_1778872626174_work-12.jpeg"
   },
-  "updated": 1778873180451
+  "updated": 1779032915046
 }
