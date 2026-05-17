@@ -9,18 +9,202 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* Scroll Video Styles */
+#video-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+#video-loader-text {
+  font-size: 32px;
+  letter-spacing: 8px;
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+
+#video-loader-progress {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.scroll-video-section {
+  position: relative;
+  height: 500vh;
+}
+
+.sticky-canvas-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1;
+  transition: opacity 0.8s ease;
+  background: #000 url('frames/frame_0001.jpg') center/cover no-repeat;
+}
+
+#hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-text-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.video-text-content {
+  text-align: center;
+  padding: 40px;
+  max-width: 900px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.video-text-content.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.video-text-content h1,
+.video-text-content h2 {
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-shadow: 0 8px 40px rgba(0,0,0,0.95);
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0;
+}
+
+.video-text-content.active h1,
+.video-text-content.active h2 {
+  animation: fadeInUp 1s ease forwards;
+}
+
+.video-text-content p {
+  font-size: 16px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.95);
+  animation: fadeInUp 1.2s ease forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.video-text-content.active p {
+  animation: fadeInUp 1.2s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.video-cta-button {
+  display: inline-block;
+  padding: 20px 50px;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  pointer-events: auto;
+  transition: all 0.4s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  animation: fadeInUp 1.4s ease forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+
+.video-text-content.active .video-cta-button {
+  animation: fadeInUp 1.4s ease forwards;
+  animation-delay: 0.4s;
+}
+
+.video-cta-button:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(255,255,255,0.4);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#main-content {
+  position: relative;
+  z-index: 10;
+  background: #0f0f0f;
+  padding-top: 100px;
+}
+
+#main-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #0f0f0f 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .scroll-video-section {
+    height: 400vh;
+  }
+  .video-text-content h1,
+  .video-text-content h2 {
+    font-size: 48px;
+  }
+  .video-text-content p {
+    font-size: 12px;
+  }
+}
+</style>
 </head>
 <body>
 
-<!-- Прелоадер -->
-<div id="loader">
-  <div class="loader-timeline">
-    <span class="future" data-edit="loader-year-end">2015</span>
-    <span class="line"></span>
-    <span class="past" data-edit="loader-year-start">2026</span>
-  </div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
-  <div class="loader-name" data-edit="loader-name">VERA</div>
+<div id="video-loader">
+  <div id="video-loader-text">VERA</div>
+  <div id="video-loader-progress">0%</div>
 </div>
 
 <!-- Шапка -->
@@ -38,100 +222,114 @@
   <button id="adminBtn" title="Админ">●</button>
 </header>
 
-<!-- Главный экран с сеткой работ -->
-<section id="hero">
-  <div class="hero-text">
+<!-- Scroll Video Section -->
+<div class="scroll-video-section">
+  <div class="sticky-canvas-wrapper">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+</div>
+
+<div class="video-text-overlay">
+  <div class="video-text-content" id="video-text-start">
     <h1 data-edit="hero-title">Искусство<br>красоты</h1>
     <p data-edit="hero-subtitle">Перманентный макияж · Брови · Губы · Тату</p>
-    <a href="https://vk.com/veronikaavakyan" class="hero-cta" data-edit="hero-cta">Записаться в Telegram →</a>
   </div>
-</section>
 
-<!-- Сетка работ как у WeLoveNoise -->
-<section id="works">
-  <h2 class="section-title" data-edit="works-title">Мои работы</h2>
-  <div class="works-grid">
-    <a class="work-item big" href="services.html">
-      <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80" alt="" data-edit-img="work-1">
-      <span data-edit="work-1-title">Перманент губ</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1583241800698-9c2e95b8b8c0?w=600&q=80" alt="" data-edit-img="work-2">
-      <span data-edit="work-2-title">Брови волосковые</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80" alt="" data-edit-img="work-3">
-      <span data-edit="work-3-title">Пудровые брови</span>
-    </a>
-    <a class="work-item big" href="services.html">
-      <img src="https://images.unsplash.com/photo-1560869713-da86a9ec0744?w=800&q=80" alt="" data-edit-img="work-4">
-      <span data-edit="work-4-title">Акварельные губы</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=600&q=80" alt="" data-edit-img="work-5">
-      <span data-edit="work-5-title">Тату минимализм</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1612270043573-c2eb1cfc1f7d?w=600&q=80" alt="" data-edit-img="work-6">
-      <span data-edit="work-6-title">Стрелки</span>
-    </a>
-    <a class="work-item big" href="services.html">
-      <img src="https://images.unsplash.com/photo-1571908598047-29a2c5fa9d39?w=800&q=80" alt="" data-edit-img="work-7">
-      <span data-edit="work-7-title">Межресничка</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=600&q=80" alt="" data-edit-img="work-8">
-      <span data-edit="work-8-title">Тату надписи</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1503236823255-94609f598e71?w=600&q=80" alt="" data-edit-img="work-9">
-      <span data-edit="work-9-title">Омбре брови</span>
-    </a>
-    <a class="work-item big" href="services.html">
-      <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=80" alt="" data-edit-img="work-10">
-      <span data-edit="work-10-title">Натуральные губы</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="" data-edit-img="work-11">
-      <span data-edit="work-11-title">Тату цветы</span>
-    </a>
-    <a class="work-item" href="services.html">
-      <img src="https://images.unsplash.com/photo-1588006173527-5b91056e69b4?w=600&q=80" alt="" data-edit-img="work-12">
-      <span data-edit="work-12-title">Коррекция</span>
-    </a>
+  <div class="video-text-content" id="video-text-end">
+    <h2>Подари себе<br>уверенность</h2>
+    <p>Запишись на консультацию</p>
+    <a href="https://vk.com/veronikaavakyan" class="video-cta-button" data-edit="hero-cta">Записаться →</a>
   </div>
-</section>
+</div>
 
-<!-- Преимущества -->
-<section id="features">
-  <div class="feature">
-    <div class="feature-num" data-edit="f1-num">01</div>
-    <h3 data-edit="f1-title">Стерильность</h3>
-    <p data-edit="f1-text">Одноразовые материалы, медицинские пигменты, полная безопасность процедуры.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-num" data-edit="f2-num">02</div>
-    <h3 data-edit="f2-title">Опыт 8+ лет</h3>
-    <p data-edit="f2-text">Более 2000 довольных клиентов и регулярное повышение квалификации.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-num" data-edit="f3-num">03</div>
-    <h3 data-edit="f3-title">Индивидуально</h3>
-    <p data-edit="f3-text">Подбираю форму и оттенок под ваши черты лица и пожелания.</p>
-  </div>
-</section>
+<!-- Main Content -->
+<div id="main-content">
+  <!-- Сетка работ -->
+  <section id="works">
+    <h2 class="section-title" data-edit="works-title">Мои работы</h2>
+    <div class="works-grid">
+      <a class="work-item big" href="services.html">
+        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80" alt="" data-edit-img="work-1">
+        <span data-edit="work-1-title">Перманент губ</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1583241800698-9c2e95b8b8c0?w=600&q=80" alt="" data-edit-img="work-2">
+        <span data-edit="work-2-title">Брови волосковые</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80" alt="" data-edit-img="work-3">
+        <span data-edit="work-3-title">Пудровые брови</span>
+      </a>
+      <a class="work-item big" href="services.html">
+        <img src="https://images.unsplash.com/photo-1560869713-da86a9ec0744?w=800&q=80" alt="" data-edit-img="work-4">
+        <span data-edit="work-4-title">Акварельные губы</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=600&q=80" alt="" data-edit-img="work-5">
+        <span data-edit="work-5-title">Тату минимализм</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1612270043573-c2eb1cfc1f7d?w=600&q=80" alt="" data-edit-img="work-6">
+        <span data-edit="work-6-title">Стрелки</span>
+      </a>
+      <a class="work-item big" href="services.html">
+        <img src="https://images.unsplash.com/photo-1571908598047-29a2c5fa9d39?w=800&q=80" alt="" data-edit-img="work-7">
+        <span data-edit="work-7-title">Межресничка</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=600&q=80" alt="" data-edit-img="work-8">
+        <span data-edit="work-8-title">Тату надписи</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1503236823255-94609f598e71?w=600&q=80" alt="" data-edit-img="work-9">
+        <span data-edit="work-9-title">Омбре брови</span>
+      </a>
+      <a class="work-item big" href="services.html">
+        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=80" alt="" data-edit-img="work-10">
+        <span data-edit="work-10-title">Натуральные губы</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="" data-edit-img="work-11">
+        <span data-edit="work-11-title">Тату цветы</span>
+      </a>
+      <a class="work-item" href="services.html">
+        <img src="https://images.unsplash.com/photo-1588006173527-5b91056e69b4?w=600&q=80" alt="" data-edit-img="work-12">
+        <span data-edit="work-12-title">Коррекция</span>
+      </a>
+    </div>
+  </section>
 
-<!-- CTA блок -->
-<section id="cta-block">
-  <h2 data-edit="cta-title">Подари себе уверенность</h2>
-  <p data-edit="cta-text">Запишись на консультацию — это бесплатно</p>
-  <a href="https://vk.com/veronikaavakyan" class="big-btn" data-edit="cta-btn">Написать в Telegram</a>
-</section>
+  <!-- Преимущества -->
+  <section id="features">
+    <div class="feature">
+      <div class="feature-num" data-edit="f1-num">01</div>
+      <h3 data-edit="f1-title">Стерильность</h3>
+      <p data-edit="f1-text">Одноразовые материалы, медицинские пигменты, полная безопасность процедуры.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num" data-edit="f2-num">02</div>
+      <h3 data-edit="f2-title">Опыт 8+ лет</h3>
+      <p data-edit="f2-text">Более 2000 довольных клиентов и регулярное повышение квалификации.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num" data-edit="f3-num">03</div>
+      <h3 data-edit="f3-title">Индивидуально</h3>
+      <p data-edit="f3-text">Подбираю форму и оттенок под ваши черты лица и пожелания.</p>
+    </div>
+  </section>
 
-<footer>
-  <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
-  <p><a href="tel:+79506960909" data-edit="footer-phone">+7 950 696 09 09</a></p>
-</footer>
+  <!-- CTA блок -->
+  <section id="cta-block">
+    <h2 data-edit="cta-title">Подари себе уверенность</h2>
+    <p data-edit="cta-text">Запишись на консультацию — это бесплатно</p>
+    <a href="https://vk.com/veronikaavakyan" class="big-btn" data-edit="cta-btn">Написать в Telegram</a>
+  </section>
+
+  <footer>
+    <p data-edit="footer-text">© Вера · Студия перманентного макияжа</p>
+    <p><a href="tel:+79506960909" data-edit="footer-phone">+7 950 696 09 09</a></p>
+  </footer>
+</div>
 
 <!-- Админка -->
 <div id="adminModal" class="admin-modal">
@@ -151,5 +349,137 @@
 
 <script src="js/github-sync.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+// Scroll Video Scrubbing
+const canvas = document.getElementById('hero-canvas');
+const context = canvas.getContext('2d');
+
+const frameCount = 181;
+const currentFrame = index => `frames/frame_${String(index + 1).padStart(4, '0')}.jpg`;
+
+const images = [];
+let imagesLoaded = 0;
+
+const videoLoader = document.getElementById('video-loader');
+const videoLoaderProgress = document.getElementById('video-loader-progress');
+const videoTextStart = document.getElementById('video-text-start');
+const videoTextEnd = document.getElementById('video-text-end');
+
+// Preload frames
+for (let i = 0; i < frameCount; i++) {
+  const img = new Image();
+  img.src = currentFrame(i);
+  img.onload = () => {
+    imagesLoaded++;
+    const percent = Math.round((imagesLoaded / frameCount) * 100);
+    videoLoaderProgress.textContent = percent + '%';
+
+    if (imagesLoaded === frameCount) {
+      setTimeout(() => {
+        videoLoader.style.transition = 'opacity 0.8s';
+        videoLoader.style.opacity = '0';
+        setTimeout(() => videoLoader.style.display = 'none', 800);
+      }, 300);
+    }
+  };
+  images.push(img);
+}
+
+// Canvas sizing
+function setCanvasSize() {
+  const img = images[0];
+  if (!img || !img.complete) {
+    setTimeout(setCanvasSize, 100);
+    return;
+  }
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+setCanvasSize();
+window.addEventListener('resize', setCanvasSize);
+
+// Draw frame
+function updateImage(index) {
+  if (images[index] && images[index].complete) {
+    const img = images[index];
+    const canvasRatio = canvas.width / canvas.height;
+    const imgRatio = img.width / img.height;
+
+    let drawWidth, drawHeight, offsetX, offsetY;
+
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+      offsetX = 0;
+      offsetY = (canvas.height - drawHeight) / 2;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+      offsetX = (canvas.width - drawWidth) / 2;
+      offsetY = 0;
+    }
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  }
+}
+
+// Scroll handler
+window.addEventListener('scroll', () => {
+  const scrollSection = document.querySelector('.scroll-video-section');
+  const canvasWrapper = document.querySelector('.sticky-canvas-wrapper');
+  const textOverlay = document.querySelector('.video-text-overlay');
+  const scrollTop = window.pageYOffset;
+  const maxScrollTop = scrollSection.offsetHeight - window.innerHeight;
+  const scrollFraction = scrollTop / maxScrollTop;
+
+  // Скрываем видео и текст после прокрутки секции
+  if (scrollTop >= maxScrollTop) {
+    canvasWrapper.style.opacity = '0';
+    canvasWrapper.style.pointerEvents = 'none';
+    textOverlay.style.opacity = '0';
+    textOverlay.style.pointerEvents = 'none';
+  } else {
+    canvasWrapper.style.opacity = '1';
+    canvasWrapper.style.pointerEvents = 'auto';
+    textOverlay.style.opacity = '1';
+    textOverlay.style.pointerEvents = 'auto';
+
+    const frameIndex = Math.min(
+      frameCount - 1,
+      Math.floor(scrollFraction * frameCount)
+    );
+
+    requestAnimationFrame(() => updateImage(frameIndex));
+
+    // Text transitions
+    if (scrollFraction < 0.2) {
+      videoTextStart.classList.add('active');
+      videoTextEnd.classList.remove('active');
+    } else if (scrollFraction > 0.8) {
+      videoTextStart.classList.remove('active');
+      videoTextEnd.classList.add('active');
+    } else {
+      videoTextStart.classList.remove('active');
+      videoTextEnd.classList.remove('active');
+    }
+  }
+});
+
+// Initialize
+updateImage(0);
+videoTextStart.classList.add('active');
+
+// Показываем canvas сразу после загрузки первого кадра
+const firstImg = images[0];
+if (firstImg && firstImg.complete) {
+  updateImage(0);
+} else if (firstImg) {
+  firstImg.addEventListener('load', () => updateImage(0));
+}
+</script>
+
 </body>
 </html>
