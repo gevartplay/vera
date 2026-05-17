@@ -53,15 +53,54 @@
   overflow: hidden;
   z-index: 1;
   transition: opacity 0.8s ease;
-  background: #000 url('frames/frame_0001.jpg') center/cover no-repeat;
+  background: #000;
 }
 
-#hero-canvas {
+/* Размытый фон */
+.canvas-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  filter: blur(40px);
+  transform: scale(1.1);
+  opacity: 0.6;
+}
+
+/* Основной canvas 16:9 */
+#hero-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+/* Градиенты сверху и снизу */
+.canvas-gradient-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.canvas-gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .video-text-overlay {
@@ -93,11 +132,11 @@
 
 .video-text-content h1,
 .video-text-content h2 {
-  font-size: clamp(48px, 8vw, 120px);
+  font-size: clamp(36px, 10vw, 120px);
   font-weight: 200;
-  line-height: 1.1;
-  letter-spacing: -2px;
-  margin-bottom: 30px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
   text-shadow: 0 8px 40px rgba(0,0,0,0.95);
   animation: fadeInUp 1s ease forwards;
   opacity: 0;
@@ -109,14 +148,15 @@
 }
 
 .video-text-content p {
-  font-size: 16px;
-  letter-spacing: 4px;
+  font-size: clamp(11px, 3vw, 16px);
+  letter-spacing: clamp(2px, 0.5vw, 4px);
   text-transform: uppercase;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   text-shadow: 0 4px 20px rgba(0,0,0,0.95);
   animation: fadeInUp 1.2s ease forwards;
   animation-delay: 0.2s;
   opacity: 0;
+  line-height: 1.6;
 }
 
 .video-text-content.active p {
@@ -126,14 +166,14 @@
 
 .video-cta-button {
   display: inline-block;
-  padding: 20px 50px;
+  padding: clamp(14px, 3vw, 20px) clamp(30px, 6vw, 50px);
   border: 2px solid #fff;
   border-radius: 50px;
-  font-size: 13px;
-  letter-spacing: 3px;
+  font-size: clamp(11px, 2.5vw, 13px);
+  letter-spacing: clamp(2px, 0.5vw, 3px);
   text-transform: uppercase;
   color: #fff;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(10px);
   text-decoration: none;
   pointer-events: auto;
@@ -190,12 +230,27 @@
   .scroll-video-section {
     height: 400vh;
   }
+
+  .video-text-content {
+    padding: 20px;
+  }
+
   .video-text-content h1,
   .video-text-content h2 {
-    font-size: 48px;
+    font-size: clamp(32px, 12vw, 60px);
+    letter-spacing: -0.5px;
+    margin-bottom: 15px;
   }
+
   .video-text-content p {
-    font-size: 12px;
+    font-size: clamp(10px, 3.5vw, 14px);
+    letter-spacing: clamp(1px, 0.3vw, 2px);
+    margin-bottom: 25px;
+  }
+
+  .canvas-gradient-top,
+  .canvas-gradient-bottom {
+    height: 120px;
   }
 }
 </style>
@@ -225,7 +280,10 @@
 <!-- Scroll Video Section -->
 <div class="scroll-video-section">
   <div class="sticky-canvas-wrapper">
+    <canvas class="canvas-background" id="hero-canvas-bg"></canvas>
     <canvas id="hero-canvas"></canvas>
+    <div class="canvas-gradient-top"></div>
+    <div class="canvas-gradient-bottom"></div>
   </div>
 </div>
 
@@ -354,6 +412,8 @@
 // Scroll Video Scrubbing
 const canvas = document.getElementById('hero-canvas');
 const context = canvas.getContext('2d');
+const canvasBg = document.getElementById('hero-canvas-bg');
+const contextBg = canvasBg.getContext('2d');
 
 const frameCount = 181;
 const currentFrame = index => `frames/frame_${String(index + 1).padStart(4, '0')}.jpg`;
@@ -393,8 +453,24 @@ function setCanvasSize() {
     setTimeout(setCanvasSize, 100);
     return;
   }
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+
+  // Размытый фон на весь экран
+  canvasBg.width = window.innerWidth;
+  canvasBg.height = window.innerHeight;
+
+  // Основной canvas 16:9
+  const imgRatio = 16 / 9;
+  const windowRatio = window.innerWidth / window.innerHeight;
+
+  if (windowRatio > imgRatio) {
+    // Окно шире чем 16:9
+    canvas.height = window.innerHeight;
+    canvas.width = canvas.height * imgRatio;
+  } else {
+    // Окно выше чем 16:9
+    canvas.width = window.innerWidth;
+    canvas.height = canvas.width / imgRatio;
+  }
 }
 
 setCanvasSize();
@@ -404,25 +480,31 @@ window.addEventListener('resize', setCanvasSize);
 function updateImage(index) {
   if (images[index] && images[index].complete) {
     const img = images[index];
-    const canvasRatio = canvas.width / canvas.height;
+
+    // Размытый фон
+    contextBg.clearRect(0, 0, canvasBg.width, canvasBg.height);
+    const bgRatio = canvasBg.width / canvasBg.height;
     const imgRatio = img.width / img.height;
 
-    let drawWidth, drawHeight, offsetX, offsetY;
+    let bgWidth, bgHeight, bgX, bgY;
 
-    if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
-      offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
+    if (bgRatio > imgRatio) {
+      bgWidth = canvasBg.width;
+      bgHeight = canvasBg.width / imgRatio;
+      bgX = 0;
+      bgY = (canvasBg.height - bgHeight) / 2;
     } else {
-      drawHeight = canvas.height;
-      drawWidth = canvas.height * imgRatio;
-      offsetX = (canvas.width - drawWidth) / 2;
-      offsetY = 0;
+      bgHeight = canvasBg.height;
+      bgWidth = canvasBg.height * imgRatio;
+      bgX = (canvasBg.width - bgWidth) / 2;
+      bgY = 0;
     }
 
+    contextBg.drawImage(img, bgX, bgY, bgWidth, bgHeight);
+
+    // Основной canvas (16:9)
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
   }
 }
 
