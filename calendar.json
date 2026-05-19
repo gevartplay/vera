@@ -647,8 +647,8 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "10:00",
-        "end": "20:00",
+        "start": "11:00",
+        "end": "12:00",
         "name": "Екатерина Шепыкина",
         "phone": "",
         "service": "Другое",
