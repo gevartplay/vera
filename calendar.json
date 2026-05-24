@@ -711,5 +711,19 @@
       }
     ],
     "breaks": []
+  },
+  "2026-06-19": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "17:00",
+        "end": "20:00",
+        "name": "Ногти Света",
+        "phone": "",
+        "service": "Другое",
+        "note": ""
+      }
+    ],
+    "breaks": []
   }
 }
