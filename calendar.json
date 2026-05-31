@@ -854,5 +854,24 @@
       }
     ],
     "breaks": []
+  },
+  "2026-06-14": {
+    "dayOff": false,
+    "bookings": [],
+    "breaks": []
+  },
+  "2026-06-15": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "14:00",
+        "end": "15:00",
+        "name": "Лариса Хаустова",
+        "phone": "",
+        "service": "Другое",
+        "note": "Коррекция воском"
+      }
+    ],
+    "breaks": []
   }
 }
