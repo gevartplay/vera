@@ -1164,8 +1164,8 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "13:00",
-        "end": "20:00",
+        "start": "14:00",
+        "end": "15:00",
         "name": "Ильина",
         "phone": "",
         "service": "Другое",
