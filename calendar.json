@@ -1313,5 +1313,19 @@
       }
     ],
     "breaks": []
+  },
+  "2026-06-22": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "12:00",
+        "end": "15:00",
+        "name": "Кератин",
+        "phone": "",
+        "service": "Другое",
+        "note": ""
+      }
+    ],
+    "breaks": []
   }
 }
