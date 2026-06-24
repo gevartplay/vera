@@ -1469,5 +1469,10 @@
       }
     ],
     "breaks": []
+  },
+  "2026-06-30": {
+    "dayOff": true,
+    "bookings": [],
+    "breaks": []
   }
 }
