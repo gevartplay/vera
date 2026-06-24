@@ -1474,5 +1474,10 @@
     "dayOff": true,
     "bookings": [],
     "breaks": []
+  },
+  "2026-06-25": {
+    "dayOff": true,
+    "bookings": [],
+    "breaks": []
   }
 }
