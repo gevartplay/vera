@@ -793,8 +793,8 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "10:00",
-        "end": "11:00",
+        "start": "09:15",
+        "end": "10:00",
         "name": "Елена Маслова",
         "phone": "",
         "service": "Другое",
