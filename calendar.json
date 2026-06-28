@@ -1511,5 +1511,19 @@
     "dayOff": true,
     "bookings": [],
     "breaks": []
+  },
+  "2026-07-11": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "11:00",
+        "end": "12:00",
+        "name": "Ольга Нехаева",
+        "phone": "",
+        "service": "Другое",
+        "note": "Лами ресниц"
+      }
+    ],
+    "breaks": []
   }
 }
