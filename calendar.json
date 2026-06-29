@@ -1511,7 +1511,7 @@
     "breaks": []
   },
   "2026-06-30": {
-    "dayOff": true,
+    "dayOff": false,
     "bookings": [],
     "breaks": []
   },
