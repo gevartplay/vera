@@ -1294,8 +1294,8 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "11:00",
-        "end": "12:00",
+        "start": "12:00",
+        "end": "13:00",
         "name": "Светлана Егорова",
         "phone": "",
         "service": "Другое",
