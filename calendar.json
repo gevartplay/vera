@@ -1992,7 +1992,7 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "09:00",
+        "start": "09:30",
         "end": "11:00",
         "name": "Суд",
         "phone": "",
