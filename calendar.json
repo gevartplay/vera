@@ -2569,5 +2569,19 @@
       }
     ],
     "breaks": []
+  },
+  "2026-08-26": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "13:00",
+        "end": "14:00",
+        "name": "Лиан",
+        "phone": "",
+        "service": "Коррекция",
+        "note": ""
+      }
+    ],
+    "breaks": []
   }
 }
