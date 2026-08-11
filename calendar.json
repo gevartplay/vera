@@ -2598,5 +2598,19 @@
     "dayOff": false,
     "bookings": [],
     "breaks": []
+  },
+  "2026-08-18": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "09:00",
+        "end": "10:00",
+        "name": "Олеся",
+        "phone": "",
+        "service": "Другое",
+        "note": "Макияж"
+      }
+    ],
+    "breaks": []
   }
 }
