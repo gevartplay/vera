@@ -2900,8 +2900,8 @@
     "dayOff": false,
     "bookings": [
       {
-        "start": "12:00",
-        "end": "13:00",
+        "start": "13:00",
+        "end": "14:00",
         "name": "Елена Макс",
         "phone": "",
         "service": "Другое",
