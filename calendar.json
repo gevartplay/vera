@@ -4797,5 +4797,19 @@
       }
     ],
     "breaks": []
+  },
+  "2026-12-19": {
+    "dayOff": false,
+    "bookings": [
+      {
+        "start": "14:00",
+        "end": "15:00",
+        "name": "Агеева хна",
+        "phone": "",
+        "service": "Другое",
+        "note": ""
+      }
+    ],
+    "breaks": []
   }
 }
